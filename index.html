@@ -1,36 +1,62 @@
 <!-- ============================================ -->
-<!-- JUEGO MEJORADO PARA #starPage6 - CON NIVELES Y TRAMPAS -->
+<!-- JUEGO MEJORADO PARA #starPage6 - OPTIMIZADO PARA MÓVIL -->
 <!-- ============================================ -->
-
-<!-- 1. REEMPLAZA TODO EL CONTENIDO DE #starPage6 CON ESTO: -->
-
 <div id="starPage6" class="page star-page">
+    <!-- Overlay de orientación -->
+    <div class="star6-orientation-overlay" id="star6OrientationOverlay">
+        <div class="star6-orientation-card">
+            <div class="star6-phone-icon">📱</div>
+            <h2>¡Gira tu dispositivo!</h2>
+            <p>Para una mejor experiencia, por favor gira tu teléfono a modo horizontal (landscape)</p>
+            <div class="star6-rotation-arrow">🔄</div>
+            <button class="star6-play-anyway-btn" onclick="star6Game.dismissOrientationWarning()">
+                Jugar de todos modos
+            </button>
+        </div>
+    </div>
+    
     <div class="star6-game-wrapper">
-        <!-- Header del juego -->
+        <!-- Header del juego - Compacto para móvil -->
         <div class="star6-header">
-            <div class="star6-health" id="star6Health">
-                <span class="star6-heart">💖</span>
-                <span class="star6-heart">💖</span>
-                <span class="star6-heart">💖</span>
+            <button class="star6-back-btn" onclick="goBackSafe()">←</button>
+            
+            <div class="star6-stats-left">
+                <div class="star6-health" id="star6Health">
+                    <span class="star6-heart">💖</span>
+                    <span class="star6-heart">💖</span>
+                    <span class="star6-heart">💖</span>
+                </div>
             </div>
-            <div class="star6-level-info">
-                <div class="star6-score">⭐ <span id="star6Score">0</span></div>
-                <div class="star6-level">Nivel <span id="star6LevelNum">1</span></div>
-                <div class="star6-stars-counter" id="star6StarsCounter">Estrellas: <span id="star6StarsCount">0/0</span></div>
+            
+            <div class="star6-stats-center">
+                <div class="star6-level">N<span id="star6LevelNum">1</span></div>
+                <div class="star6-score">⭐<span id="star6Score">0</span></div>
+                <div class="star6-stars-counter">
+                    <span id="star6StarsCount">0/0</span>
+                </div>
             </div>
-            <button class="star6-back-btn" onclick="goBackSafe()">← Volver</button>
+            
+            <div class="star6-stats-right">
+                <button class="star6-pause-btn" onclick="star6Game.togglePause()">⏸</button>
+            </div>
         </div>
-
+        
         <!-- Canvas del juego -->
-        <canvas id="star6Canvas"></canvas>
-
-        <!-- Controles táctiles -->
-        <div class="star6-controls">
-            <button class="star6-btn star6-btn-left" id="star6BtnLeft">◄</button>
-            <button class="star6-btn star6-btn-jump" id="star6BtnJump">▲</button>
-            <button class="star6-btn star6-btn-right" id="star6BtnRight">►</button>
+        <div class="star6-canvas-container">
+            <canvas id="star6Canvas"></canvas>
         </div>
-
+        
+        <!-- Controles táctiles optimizados -->
+        <div class="star6-controls">
+            <div class="star6-controls-left">
+                <button class="star6-btn star6-btn-left" id="star6BtnLeft">◄</button>
+                <button class="star6-btn star6-btn-right" id="star6BtnRight">►</button>
+            </div>
+            <div class="star6-controls-right">
+                <button class="star6-btn star6-btn-jump" id="star6BtnJump">▲</button>
+            </div>
+        </div>
+        
         <!-- Overlay de mensaje romántico -->
         <div class="star6-message-overlay" id="star6MessageOverlay">
             <div class="star6-message-card">
@@ -39,7 +65,7 @@
                 <button class="star6-message-btn" onclick="star6Game.closeLoveMessage()">Continuar ✨</button>
             </div>
         </div>
-
+        
         <!-- Overlay de nivel completado -->
         <div class="star6-message-overlay" id="star6LevelComplete">
             <div class="star6-message-card">
@@ -48,20 +74,35 @@
                 <button class="star6-message-btn" onclick="star6Game.nextLevel()">Siguiente Nivel →</button>
             </div>
         </div>
-
+        
+        <!-- Overlay de pausa -->
+        <div class="star6-message-overlay" id="star6PauseOverlay">
+            <div class="star6-message-card">
+                <h2>⏸️ Pausa</h2>
+                <p>El juego está en pausa</p>
+                <button class="star6-message-btn" onclick="star6Game.togglePause()">Continuar</button>
+                <button class="star6-message-btn star6-secondary-btn" onclick="star6Game.restart()">Reiniciar Nivel</button>
+            </div>
+        </div>
+        
         <!-- Indicador de power-up activo -->
         <div class="star6-powerup-indicator" id="star6PowerupIndicator"></div>
     </div>
 </div>
 
 <!-- ============================================ -->
-<!-- 2. AGREGA ESTOS ESTILOS A TU CSS -->
+<!-- ESTILOS MEJORADOS PARA MÓVIL -->
 <!-- ============================================ -->
-
 <style>
-/* Estilos exclusivos para Star Page 6 - Juego Mejorado */
+/* Estilos exclusivos para Star Page 6 - Juego Optimizado para Móvil */
 #starPage6 {
     background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
 }
 
 #starPage6 .star6-game-wrapper {
@@ -70,125 +111,231 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
     overflow: hidden;
 }
 
-/* Header */
-#starPage6 .star6-header {
-    position: absolute;
-    top: 10px;
+/* Overlay de orientación */
+#starPage6 .star6-orientation-overlay {
+    position: fixed;
+    top: 0;
     left: 0;
     right: 0;
-    display: flex;
-    justify-content: space-between;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.95);
+    display: none;
     align-items: center;
-    padding: 0 15px;
+    justify-content: center;
+    z-index: 10000;
+    animation: star6-fadeIn 0.3s ease;
+}
+
+#starPage6 .star6-orientation-overlay.active {
+    display: flex;
+}
+
+#starPage6 .star6-orientation-card {
+    background: linear-gradient(135deg, #fff5f7 0%, #ffe8ec 100%);
+    border-radius: 25px;
+    padding: 40px 30px;
+    max-width: 85%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(255, 107, 157, 0.6);
+    animation: star6-scaleIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+#starPage6 .star6-phone-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+    animation: star6-rotate 2s ease-in-out infinite;
+}
+
+#starPage6 .star6-orientation-card h2 {
+    color: #ff6b9d;
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+#starPage6 .star6-orientation-card p {
+    color: #555;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+#starPage6 .star6-rotation-arrow {
+    font-size: 50px;
+    margin: 20px 0;
+    animation: star6-spin 2s linear infinite;
+}
+
+#starPage6 .star6-play-anyway-btn {
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s;
+}
+
+#starPage6 .star6-play-anyway-btn:active {
+    transform: scale(0.95);
+}
+
+/* Header compacto */
+#starPage6 .star6-header {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    padding: 8px 10px;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     z-index: 100;
+    gap: 10px;
+}
+
+#starPage6 .star6-stats-left,
+#starPage6 .star6-stats-center,
+#starPage6 .star6-stats-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#starPage6 .star6-stats-center {
+    justify-content: center;
+    gap: 12px;
+}
+
+#starPage6 .star6-stats-right {
+    justify-content: flex-end;
 }
 
 #starPage6 .star6-health {
     display: flex;
-    gap: 6px;
+    gap: 4px;
 }
 
 #starPage6 .star6-heart {
-    font-size: 26px;
-    filter: drop-shadow(2px 2px 4px rgba(255, 107, 157, 0.4));
-    animation: star6-heartbeat 1.5s ease-in-out infinite;
-}
-
-#starPage6 .star6-level-info {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    align-items: center;
+    font-size: 20px;
+    filter: drop-shadow(1px 1px 2px rgba(255, 107, 157, 0.4));
 }
 
 #starPage6 .star6-score,
 #starPage6 .star6-level,
 #starPage6 .star6-stars-counter {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 6px 15px;
-    border-radius: 20px;
+    background: linear-gradient(135deg, #ff6b9d 0%, #ff8fab 100%);
+    padding: 4px 10px;
+    border-radius: 15px;
     font-weight: bold;
-    font-size: 16px;
-    color: #ff6b9d;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    font-size: 13px;
+    color: white;
+    box-shadow: 0 2px 8px rgba(255, 107, 157, 0.3);
+    white-space: nowrap;
 }
 
 #starPage6 .star6-level {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    font-size: 14px;
 }
 
 #starPage6 .star6-stars-counter {
     background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
     color: #8b4513;
-    font-size: 14px;
 }
 
-#starPage6 .star6-back-btn {
-    background: rgba(255, 255, 255, 0.95);
-    border: none;
-    padding: 8px 16px;
-    border-radius: 20px;
+#starPage6 .star6-back-btn,
+#starPage6 .star6-pause-btn {
+    background: rgba(255, 107, 157, 0.2);
+    border: 2px solid #ff6b9d;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 18px;
     color: #ff6b9d;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-    transition: transform 0.2s;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-#starPage6 .star6-back-btn:active {
-    transform: scale(0.95);
+#starPage6 .star6-back-btn:active,
+#starPage6 .star6-pause-btn:active {
+    transform: scale(0.9);
+    background: rgba(255, 107, 157, 0.3);
 }
 
-/* Canvas */
+/* Canvas container */
+#starPage6 .star6-canvas-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    overflow: hidden;
+}
+
 #starPage6 #star6Canvas {
-    max-width: 95%;
-    max-height: 65vh;
-    border: 5px solid #fff;
-    border-radius: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    max-width: 100%;
+    max-height: 100%;
+    border: 3px solid #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
     background: #87ceeb;
     image-rendering: crisp-edges;
+    display: block;
 }
 
-/* Controles */
+/* Controles optimizados */
 #starPage6 .star6-controls {
-    position: absolute;
-    bottom: 20px;
-    left: 0;
-    right: 0;
-    display: flex;
-    justify-content: space-around;
-    padding: 0 25px;
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    padding: 10px 15px;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
     z-index: 100;
 }
 
+#starPage6 .star6-controls-left {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-start;
+}
+
+#starPage6 .star6-controls-right {
+    display: flex;
+    justify-content: flex-end;
+}
+
 #starPage6 .star6-btn {
-    width: 70px;
-    height: 70px;
+    width: 65px;
+    height: 65px;
     border-radius: 50%;
     border: none;
     background: rgba(255, 255, 255, 0.95);
     color: #ff6b9d;
-    font-size: 30px;
+    font-size: 28px;
     font-weight: bold;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
     cursor: pointer;
     transition: all 0.1s;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #starPage6 .star6-btn:active {
-    transform: scale(0.85);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    transform: scale(0.88);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
 #starPage6 .star6-btn-jump {
@@ -196,11 +343,11 @@
     color: white;
     width: 75px;
     height: 75px;
-    font-size: 26px;
-    box-shadow: 0 8px 25px rgba(255, 107, 157, 0.5);
+    font-size: 24px;
+    box-shadow: 0 6px 20px rgba(255, 107, 157, 0.5);
 }
 
-/* Mensaje romántico y nivel completado */
+/* Mensaje romántico y overlays */
 #starPage6 .star6-message-overlay {
     position: absolute;
     top: 0;
@@ -213,6 +360,7 @@
     justify-content: center;
     z-index: 1000;
     animation: star6-fadeIn 0.4s ease;
+    padding: 20px;
 }
 
 #starPage6 .star6-message-overlay.active {
@@ -221,8 +369,8 @@
 
 #starPage6 .star6-message-card {
     background: linear-gradient(135deg, #fff5f7 0%, #ffe8ec 100%);
-    border-radius: 25px;
-    padding: 30px;
+    border-radius: 20px;
+    padding: 25px;
     max-width: 90%;
     max-height: 80%;
     overflow-y: auto;
@@ -233,50 +381,56 @@
 #starPage6 .star6-message-card h2 {
     color: #ff6b9d;
     text-align: center;
-    margin-bottom: 20px;
-    font-size: 24px;
+    margin-bottom: 15px;
+    font-size: 22px;
     text-shadow: 2px 2px 4px rgba(255, 107, 157, 0.2);
 }
 
 #starPage6 .star6-message-card p {
     color: #555;
-    line-height: 1.8;
-    font-size: 17px;
+    line-height: 1.7;
+    font-size: 15px;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
 }
 
 #starPage6 .star6-message-btn {
-    padding: 14px 32px;
+    padding: 12px 28px;
     background: linear-gradient(135deg, #ff6b9d 0%, #ff8fab 100%);
     color: white;
     border: none;
-    border-radius: 30px;
-    font-size: 17px;
+    border-radius: 25px;
+    font-size: 16px;
     font-weight: bold;
     cursor: pointer;
     display: block;
-    margin: 0 auto;
-    box-shadow: 0 6px 20px rgba(255, 107, 157, 0.4);
+    margin: 10px auto 0;
+    box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
     transition: all 0.3s;
+    width: 90%;
+    max-width: 250px;
 }
 
 #starPage6 .star6-message-btn:active {
     transform: translateY(2px);
-    box-shadow: 0 3px 10px rgba(255, 107, 157, 0.4);
+    box-shadow: 0 2px 8px rgba(255, 107, 157, 0.4);
+}
+
+#starPage6 .star6-secondary-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 /* Indicador de power-up */
 #starPage6 .star6-powerup-indicator {
     position: absolute;
-    top: 80px;
+    top: 70px;
     left: 50%;
     transform: translateX(-50%);
     background: rgba(255, 215, 0, 0.95);
-    padding: 10px 20px;
+    padding: 8px 16px;
     border-radius: 20px;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 14px;
     color: #8b4513;
     box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5);
     display: none;
@@ -285,11 +439,6 @@
 }
 
 /* Animaciones */
-@keyframes star6-heartbeat {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.15); }
-}
-
 @keyframes star6-fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -308,51 +457,56 @@
 
 @keyframes star6-bounce {
     0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(-10px); }
+    50% { transform: translateX(-50%) translateY(-8px); }
 }
 
-/* Responsive */
-@media (max-width: 600px) {
+@keyframes star6-rotate {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-15deg); }
+    75% { transform: rotate(15deg); }
+}
+
+@keyframes star6-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Landscape (modo horizontal - ideal para jugar) */
+@media (orientation: landscape) {
+    #starPage6 .star6-header {
+        padding: 6px 12px;
+    }
+    
+    #starPage6 .star6-controls {
+        padding: 8px 20px;
+    }
+    
     #starPage6 .star6-btn {
-        width: 60px;
-        height: 60px;
-        font-size: 26px;
+        width: 58px;
+        height: 58px;
     }
     
     #starPage6 .star6-btn-jump {
-        width: 65px;
-        height: 65px;
-    }
-    
-    #starPage6 .star6-heart {
-        font-size: 22px;
-    }
-    
-    #starPage6 .star6-score,
-    #starPage6 .star6-level,
-    #starPage6 .star6-stars-counter {
-        font-size: 14px;
-        padding: 5px 12px;
-    }
-    
-    #starPage6 .star6-message-card {
-        padding: 25px;
-    }
-    
-    #starPage6 .star6-message-card h2 {
-        font-size: 20px;
-    }
-    
-    #starPage6 .star6-message-card p {
-        font-size: 15px;
+        width: 68px;
+        height: 68px;
     }
 }
 
-@media (max-width: 400px) {
+/* Portrait (modo vertical - mostrar advertencia en móvil) */
+@media (orientation: portrait) and (max-width: 768px) {
     #starPage6 .star6-controls {
-        padding: 0 15px;
+        grid-template-columns: 1fr;
+        gap: 10px;
     }
     
+    #starPage6 .star6-controls-left,
+    #starPage6 .star6-controls-right {
+        justify-content: center;
+    }
+}
+
+/* Pantallas muy pequeñas */
+@media (max-width: 400px) {
     #starPage6 .star6-btn {
         width: 55px;
         height: 55px;
@@ -360,22 +514,54 @@
     }
     
     #starPage6 .star6-btn-jump {
-        width: 58px;
-        height: 58px;
+        width: 62px;
+        height: 62px;
     }
     
-    #starPage6 .star6-header {
-        padding: 0 10px;
+    #starPage6 .star6-heart {
+        font-size: 18px;
+    }
+    
+    #starPage6 .star6-score,
+    #starPage6 .star6-level,
+    #starPage6 .star6-stars-counter {
+        font-size: 12px;
+        padding: 3px 8px;
+    }
+    
+    #starPage6 .star6-message-card h2 {
+        font-size: 20px;
+    }
+    
+    #starPage6 .star6-message-card p {
+        font-size: 14px;
+    }
+}
+
+/* Tablets y pantallas medianas */
+@media (min-width: 768px) {
+    #starPage6 #star6Canvas {
+        border-radius: 16px;
+        border-width: 4px;
+    }
+    
+    #starPage6 .star6-btn {
+        width: 70px;
+        height: 70px;
+    }
+    
+    #starPage6 .star6-btn-jump {
+        width: 80px;
+        height: 80px;
     }
 }
 </style>
 
 <!-- ============================================ -->
-<!-- 3. AGREGA ESTE JAVASCRIPT AL FINAL DE TU ARCHIVO HTML -->
+<!-- JAVASCRIPT MEJORADO -->
 <!-- ============================================ -->
-
 <script>
-// Juego de la Estrella 6 - Versión Mejorada con Niveles y Trampas
+// Juego de la Estrella 6 - Versión Optimizada para Móvil
 const star6Game = (function() {
     'use strict';
     
@@ -385,7 +571,9 @@ const star6Game = (function() {
     let health = 3;
     let currentLevel = 1;
     let gameRunning = false;
+    let gamePaused = false;
     let animationId = null;
+    let orientationWarningDismissed = false;
     
     // Power-ups
     let powerups = {
@@ -440,203 +628,238 @@ const star6Game = (function() {
     let particles = [];
     let movingPlatforms = [];
     
-    // Definición de niveles
+    // Niveles mejorados y balanceados para móvil
     const levels = [
-        // Nivel 1 - Tutorial básico
+        // Nivel 1 - Tutorial suave
         {
-            name: "Comienzo Romántico",
+            name: "Primeros Pasos del Amor",
             gravity: 0.6,
             platforms: [
                 { x: 0, y: 550, width: 800, height: 50, type: 'ground' },
-                { x: 200, y: 450, width: 150, height: 20, type: 'normal' },
-                { x: 450, y: 350, width: 120, height: 20, type: 'normal' },
-                { x: 150, y: 250, width: 180, height: 20, type: 'normal' }
+                { x: 180, y: 470, width: 140, height: 20, type: 'normal' },
+                { x: 420, y: 390, width: 140, height: 20, type: 'normal' },
+                { x: 200, y: 290, width: 160, height: 20, type: 'normal' }
             ],
             enemies: [
-                { x: 320, y: 510, width: 28, height: 28, speed: 2, dir: 1, minX: 100, maxX: 500 }
+                { x: 350, y: 510, width: 28, height: 28, speed: 1.8, dir: 1, minX: 150, maxX: 550 }
             ],
-            traps: [
-                { x: 600, y: 530, width: 50, height: 20, type: 'spikes' }
-            ],
+            traps: [],
             hearts: [
-                { x: 280, y: 420, width: 24, height: 24 }
-            ],
-            stars: [
-                { x: 220, y: 420, width: 18, height: 18 },
-                { x: 500, y: 320, width: 18, height: 18 },
-                { x: 230, y: 220, width: 18, height: 18 }
-            ],
-            powerups: []
-        },
-        // Nivel 2 - Plataformas móviles
-        {
-            name: "Baile de Plataformas",
-            gravity: 0.6,
-            platforms: [
-                { x: 0, y: 550, width: 800, height: 50, type: 'ground' },
-                { x: 150, y: 450, width: 100, height: 20, type: 'normal' },
-                { x: 550, y: 350, width: 120, height: 20, type: 'normal' }
-            ],
-            movingPlatforms: [
-                { x: 300, y: 400, width: 100, height: 20, speed: 2, minX: 300, maxX: 500, dir: 1 },
-                { x: 200, y: 250, width: 100, height: 20, speed: 1.5, minY: 200, maxY: 350, dir: 1, vertical: true }
-            ],
-            enemies: [
-                { x: 400, y: 510, width: 28, height: 28, speed: 2.5, dir: 1, minX: 200, maxX: 600 },
-                { x: 600, y: 310, width: 28, height: 28, speed: 2, dir: -1, minX: 550, maxX: 670 }
-            ],
-            traps: [
-                { x: 100, y: 530, width: 80, height: 20, type: 'spikes' },
-                { x: 700, y: 530, width: 60, height: 20, type: 'spikes' }
-            ],
-            hearts: [
-                { x: 350, y: 370, width: 24, height: 24 }
-            ],
-            stars: [
-                { x: 200, y: 420, width: 18, height: 18 },
-                { x: 400, y: 370, width: 18, height: 18 },
-                { x: 600, y: 320, width: 18, height: 18 },
-                { x: 250, y: 220, width: 18, height: 18 }
-            ],
-            powerups: [
-                { x: 580, y: 320, width: 20, height: 20, type: 'speed' }
-            ]
-        },
-        // Nivel 3 - Laberinto de amor (balanceado)
-        {
-            name: "Laberinto del Corazón",
-            gravity: 0.6,
-            platforms: [
-                { x: 0, y: 550, width: 220, height: 50, type: 'ground' },
-                { x: 300, y: 550, width: 500, height: 50, type: 'ground' },
-                { x: 100, y: 450, width: 130, height: 20, type: 'normal' },
-                { x: 350, y: 400, width: 100, height: 20, type: 'normal' },
-                { x: 500, y: 320, width: 120, height: 20, type: 'normal' },
-                { x: 640, y: 240, width: 120, height: 20, type: 'normal' },
-                { x: 380, y: 180, width: 180, height: 20, type: 'normal' }
-            ],
-            enemies: [
-                { x: 350, y: 510, width: 28, height: 28, speed: 2, dir: 1, minX: 300, maxX: 550 },
-                { x: 550, y: 280, width: 28, height: 28, speed: 2, dir: -1, minX: 500, maxX: 620 }
-            ],
-            traps: [
-                { x: 235, y: 530, width: 55, height: 20, type: 'spikes' },
-                { x: 250, y: 380, width: 45, height: 20, type: 'fire' },
-                { x: 460, y: 300, width: 35, height: 20, type: 'fire' }
-            ],
-            hearts: [
-                { x: 670, y: 210, width: 24, height: 24 }
-            ],
-            stars: [
-                { x: 150, y: 420, width: 18, height: 18 },
-                { x: 380, y: 370, width: 18, height: 18 },
-                { x: 530, y: 290, width: 18, height: 18 },
-                { x: 670, y: 210, width: 18, height: 18 },
-                { x: 450, y: 150, width: 18, height: 18 }
-            ],
-            powerups: [
-                { x: 120, y: 420, width: 20, height: 20, type: 'speed' }
-            ]
-        },
-        // Nivel 4 - Desafío divertido (mejorado)
-        {
-            name: "Prueba de Amor Verdadero",
-            gravity: 0.6,
-            platforms: [
-                { x: 0, y: 550, width: 200, height: 50, type: 'ground' },
-                { x: 600, y: 550, width: 200, height: 50, type: 'ground' },
-                { x: 180, y: 470, width: 120, height: 20, type: 'normal' },
-                { x: 500, y: 470, width: 120, height: 20, type: 'normal' },
-                { x: 100, y: 370, width: 140, height: 20, type: 'normal' },
-                { x: 560, y: 370, width: 140, height: 20, type: 'normal' },
-                { x: 320, y: 270, width: 160, height: 20, type: 'normal' },
-                { x: 200, y: 170, width: 400, height: 20, type: 'normal' }
-            ],
-            movingPlatforms: [
-                { x: 350, y: 400, width: 100, height: 20, speed: 2, minX: 320, maxX: 480, dir: 1 }
-            ],
-            enemies: [
-                { x: 100, y: 510, width: 28, height: 28, speed: 2, dir: 1, minX: 0, maxX: 200 },
-                { x: 650, y: 510, width: 28, height: 28, speed: 2, dir: -1, minX: 600, maxX: 800 },
-                { x: 380, y: 430, width: 28, height: 28, speed: 1.5, dir: 1, minX: 350, maxX: 450 }
-            ],
-            traps: [
-                { x: 220, y: 530, width: 360, height: 20, type: 'spikes' },
-                { x: 260, y: 450, width: 50, height: 20, type: 'fire' },
-                { x: 490, y: 450, width: 50, height: 20, type: 'fire' }
-            ],
-            hearts: [
-                { x: 400, y: 240, width: 24, height: 24 }
+                { x: 450, y: 360, width: 24, height: 24 }
             ],
             stars: [
                 { x: 220, y: 440, width: 18, height: 18 },
-                { x: 560, y: 440, width: 18, height: 18 },
-                { x: 150, y: 340, width: 18, height: 18 },
-                { x: 620, y: 340, width: 18, height: 18 },
-                { x: 380, y: 240, width: 18, height: 18 },
-                { x: 300, y: 140, width: 18, height: 18 },
-                { x: 500, y: 140, width: 18, height: 18 }
+                { x: 470, y: 360, width: 18, height: 18 },
+                { x: 250, y: 260, width: 18, height: 18 }
+            ],
+            powerups: [],
+            movingPlatforms: []
+        },
+        
+        // Nivel 2 - Introducción a plataformas móviles
+        {
+            name: "Danza de Corazones",
+            gravity: 0.6,
+            platforms: [
+                { x: 0, y: 550, width: 180, height: 50, type: 'ground' },
+                { x: 620, y: 550, width: 180, height: 50, type: 'ground' },
+                { x: 100, y: 430, width: 120, height: 20, type: 'normal' },
+                { x: 580, y: 430, width: 120, height: 20, type: 'normal' },
+                { x: 200, y: 280, width: 150, height: 20, type: 'normal' },
+                { x: 450, y: 280, width: 150, height: 20, type: 'normal' }
+            ],
+            movingPlatforms: [
+                { x: 300, y: 380, width: 110, height: 20, speed: 2, minX: 250, maxX: 490, dir: 1 }
+            ],
+            enemies: [
+                { x: 100, y: 510, width: 28, height: 28, speed: 2, dir: 1, minX: 0, maxX: 180 },
+                { x: 660, y: 510, width: 28, height: 28, speed: 2, dir: -1, minX: 620, maxX: 800 }
+            ],
+            traps: [
+                { x: 200, y: 530, width: 400, height: 20, type: 'spikes' }
+            ],
+            hearts: [
+                { x: 360, y: 350, width: 24, height: 24 }
+            ],
+            stars: [
+                { x: 140, y: 400, width: 18, height: 18 },
+                { x: 640, y: 400, width: 18, height: 18 },
+                { x: 250, y: 250, width: 18, height: 18 },
+                { x: 510, y: 250, width: 18, height: 18 }
             ],
             powerups: [
-                { x: 390, y: 370, width: 20, height: 20, type: 'doubleJump' },
-                { x: 120, y: 340, width: 20, height: 20, type: 'invincible' }
+                { x: 370, y: 350, width: 20, height: 20, type: 'speed' }
             ]
         },
-        // Nivel 5 - Final épico (balanceado y más accesible)
+        
+        // Nivel 3 - Desafío moderado
         {
-            name: "El Castillo del Amor Eterno",
+            name: "Camino de las Estrellas",
+            gravity: 0.6,
+            platforms: [
+                { x: 0, y: 550, width: 150, height: 50, type: 'ground' },
+                { x: 650, y: 550, width: 150, height: 50, type: 'ground' },
+                { x: 120, y: 460, width: 100, height: 20, type: 'normal' },
+                { x: 580, y: 460, width: 100, height: 20, type: 'normal' },
+                { x: 180, y: 360, width: 110, height: 20, type: 'normal' },
+                { x: 510, y: 360, width: 110, height: 20, type: 'normal' },
+                { x: 330, y: 260, width: 140, height: 20, type: 'normal' },
+                { x: 250, y: 170, width: 300, height: 20, type: 'normal' }
+            ],
+            movingPlatforms: [
+                { x: 300, y: 410, width: 100, height: 20, speed: 2.2, minX: 250, maxX: 500, dir: 1 }
+            ],
+            enemies: [
+                { x: 80, y: 510, width: 28, height: 28, speed: 2, dir: 1, minX: 0, maxX: 150 },
+                { x: 690, y: 510, width: 28, height: 28, speed: 2, dir: -1, minX: 650, maxX: 800 },
+                { x: 220, y: 320, width: 28, height: 28, speed: 1.8, dir: 1, minX: 180, maxX: 290 }
+            ],
+            traps: [
+                { x: 170, y: 530, width: 460, height: 20, type: 'spikes' },
+                { x: 350, y: 240, width: 50, height: 20, type: 'fire' }
+            ],
+            hearts: [
+                { x: 380, y: 230, width: 24, height: 24 }
+            ],
+            stars: [
+                { x: 160, y: 430, width: 18, height: 18 },
+                { x: 630, y: 430, width: 18, height: 18 },
+                { x: 220, y: 330, width: 18, height: 18 },
+                { x: 560, y: 330, width: 18, height: 18 },
+                { x: 380, y: 230, width: 18, height: 18 },
+                { x: 350, y: 140, width: 18, height: 18 }
+            ],
+            powerups: [
+                { x: 340, y: 380, width: 20, height: 20, type: 'doubleJump' }
+            ]
+        },
+        
+        // Nivel 4 - Plataformas verticales
+        {
+            name: "Escalera al Cielo",
+            gravity: 0.6,
+            platforms: [
+                { x: 0, y: 550, width: 800, height: 50, type: 'ground' },
+                { x: 150, y: 450, width: 120, height: 20, type: 'normal' },
+                { x: 530, y: 450, width: 120, height: 20, type: 'normal' },
+                { x: 80, y: 340, width: 130, height: 20, type: 'normal' },
+                { x: 590, y: 340, width: 130, height: 20, type: 'normal' },
+                { x: 310, y: 240, width: 180, height: 20, type: 'normal' },
+                { x: 200, y: 150, width: 400, height: 20, type: 'normal' }
+            ],
+            movingPlatforms: [
+                { x: 350, y: 380, width: 100, height: 20, speed: 2, minX: 300, maxX: 500, dir: 1 },
+                { x: 150, y: 280, width: 90, height: 20, speed: 1.8, minY: 240, maxY: 360, dir: 1, vertical: true }
+            ],
+            enemies: [
+                { x: 400, y: 510, width: 28, height: 28, speed: 2.5, dir: 1, minX: 250, maxX: 550 },
+                { x: 190, y: 410, width: 28, height: 28, speed: 2, dir: 1, minX: 150, maxX: 270 },
+                { x: 580, y: 410, width: 28, height: 28, speed: 2, dir: -1, minX: 530, maxX: 650 }
+            ],
+            traps: [
+                { x: 100, y: 530, width: 80, height: 20, type: 'spikes' },
+                { x: 620, y: 530, width: 80, height: 20, type: 'spikes' },
+                { x: 280, y: 220, width: 40, height: 20, type: 'fire' },
+                { x: 480, y: 220, width: 40, height: 20, type: 'fire' }
+            ],
+            hearts: [
+                { x: 400, y: 210, width: 24, height: 24 }
+            ],
+            stars: [
+                { x: 190, y: 420, width: 18, height: 18 },
+                { x: 580, y: 420, width: 18, height: 18 },
+                { x: 130, y: 310, width: 18, height: 18 },
+                { x: 640, y: 310, width: 18, height: 18 },
+                { x: 360, y: 210, width: 18, height: 18 },
+                { x: 300, y: 120, width: 18, height: 18 },
+                { x: 500, y: 120, width: 18, height: 18 }
+            ],
+            powerups: [
+                { x: 380, y: 350, width: 20, height: 20, type: 'invincible' },
+                { x: 150, y: 310, width: 20, height: 20, type: 'speed' }
+            ]
+        },
+        
+        // Nivel 5 - Final épico pero accesible
+        {
+            name: "Castillo del Amor Eterno",
             gravity: 0.6,
             platforms: [
                 { x: 0, y: 550, width: 120, height: 50, type: 'ground' },
                 { x: 680, y: 550, width: 120, height: 50, type: 'ground' },
-                { x: 150, y: 480, width: 80, height: 20, type: 'normal' },
-                { x: 570, y: 480, width: 80, height: 20, type: 'normal' },
-                { x: 100, y: 390, width: 100, height: 20, type: 'normal' },
-                { x: 600, y: 390, width: 100, height: 20, type: 'normal' },
-                { x: 240, y: 310, width: 110, height: 20, type: 'normal' },
-                { x: 450, y: 310, width: 110, height: 20, type: 'normal' },
-                { x: 330, y: 230, width: 140, height: 20, type: 'normal' },
-                { x: 280, y: 180, width: 240, height: 20, type: 'normal' } // CAMBIADO: antes era y: 130
+                { x: 140, y: 480, width: 90, height: 20, type: 'normal' },
+                { x: 570, y: 480, width: 90, height: 20, type: 'normal' },
+                { x: 100, y: 390, width: 110, height: 20, type: 'normal' },
+                { x: 590, y: 390, width: 110, height: 20, type: 'normal' },
+                { x: 230, y: 310, width: 120, height: 20, type: 'normal' },
+                { x: 450, y: 310, width: 120, height: 20, type: 'normal' },
+                { x: 320, y: 220, width: 160, height: 20, type: 'normal' },
+                { x: 250, y: 140, width: 300, height: 20, type: 'normal' }
             ],
             movingPlatforms: [
-                { x: 300, y: 440, width: 120, height: 20, speed: 2.5, minX: 280, maxX: 480, dir: 1 },
-                { x: 180, y: 350, width: 90, height: 20, speed: 2, minY: 280, maxY: 400, dir: 1, vertical: true }
+                { x: 300, y: 440, width: 120, height: 20, speed: 2.5, minX: 260, maxX: 480, dir: 1 },
+                { x: 180, y: 350, width: 100, height: 20, speed: 2, minY: 280, maxY: 400, dir: 1, vertical: true }
             ],
             enemies: [
                 { x: 60, y: 510, width: 28, height: 28, speed: 2.5, dir: 1, minX: 0, maxX: 120 },
                 { x: 730, y: 510, width: 28, height: 28, speed: 2.5, dir: -1, minX: 680, maxX: 800 },
-                { x: 180, y: 440, width: 28, height: 28, speed: 2, dir: 1, minX: 150, maxX: 230 },
-                { x: 600, y: 440, width: 28, height: 28, speed: 2, dir: -1, minX: 570, maxX: 650 },
-                { x: 270, y: 270, width: 28, height: 28, speed: 1.8, dir: 1, minX: 240, maxX: 350 },
-                { x: 480, y: 270, width: 28, height: 28, speed: 1.8, dir: -1, minX: 450, maxX: 560 }
+                { x: 170, y: 440, width: 28, height: 28, speed: 2, dir: 1, minX: 140, maxX: 230 },
+                { x: 260, y: 270, width: 28, height: 28, speed: 2, dir: 1, minX: 230, maxX: 350 },
+                { x: 480, y: 270, width: 28, height: 28, speed: 2, dir: -1, minX: 450, maxX: 570 }
             ],
             traps: [
-                { x: 135, y: 530, width: 530, height: 20, type: 'spikes' },
-                { x: 250, y: 460, width: 300, height: 20, type: 'fire' },
-                { x: 370, y: 290, width: 60, height: 20, type: 'fire' }
+                { x: 140, y: 530, width: 520, height: 20, type: 'spikes' },
+                { x: 260, y: 460, width: 280, height: 20, type: 'fire' },
+                { x: 360, y: 290, width: 80, height: 20, type: 'fire' }
             ],
             hearts: [
-                { x: 380, y: 200, width: 24, height: 24 }, // Ajustado para nueva plataforma
-                { x: 400, y: 150, width: 24, height: 24 }  // Ajustado para nueva plataforma
+                { x: 380, y: 190, width: 24, height: 24 },
+                { x: 350, y: 110, width: 24, height: 24 }
             ],
             stars: [
-                { x: 180, y: 450, width: 18, height: 18 },
-                { x: 600, y: 450, width: 18, height: 18 },
+                { x: 170, y: 450, width: 18, height: 18 },
+                { x: 610, y: 450, width: 18, height: 18 },
                 { x: 140, y: 360, width: 18, height: 18 },
                 { x: 640, y: 360, width: 18, height: 18 },
                 { x: 270, y: 280, width: 18, height: 18 },
-                { x: 490, y: 280, width: 18, height: 18 },
-                { x: 370, y: 200, width: 18, height: 18 },
-                { x: 340, y: 150, width: 18, height: 18 }, // Ajustado
-                { x: 460, y: 150, width: 18, height: 18 }  // Ajustado
+                { x: 500, y: 280, width: 18, height: 18 },
+                { x: 370, y: 190, width: 18, height: 18 },
+                { x: 320, y: 110, width: 18, height: 18 },
+                { x: 480, y: 110, width: 18, height: 18 }
             ],
             powerups: [
-                { x: 360, y: 410, width: 20, height: 20, type: 'invincible' },
-                { x: 380, y: 280, width: 20, height: 20, type: 'doubleJump' },
-                { x: 150, y: 360, width: 20, height: 20, type: 'speed' }
+                { x: 350, y: 410, width: 20, height: 20, type: 'invincible' },
+                { x: 190, y: 350, width: 20, height: 20, type: 'doubleJump' },
+                { x: 380, y: 280, width: 20, height: 20, type: 'speed' }
             ]
         }
     ];
+    
+    // Detectar orientación y mostrar advertencia en móvil
+    function checkOrientation() {
+        if (window.innerWidth > 768) {
+            // No mostrar advertencia en tablets/desktop
+            return;
+        }
+        
+        const overlay = document.getElementById('star6OrientationOverlay');
+        if (!overlay || orientationWarningDismissed) return;
+        
+        const isPortrait = window.innerHeight > window.innerWidth;
+        
+        if (isPortrait) {
+            overlay.classList.add('active');
+        } else {
+            overlay.classList.remove('active');
+        }
+    }
+    
+    // Descartar advertencia de orientación
+    function dismissOrientationWarning() {
+        orientationWarningDismissed = true;
+        const overlay = document.getElementById('star6OrientationOverlay');
+        if (overlay) overlay.classList.remove('active');
+    }
     
     // Inicializar canvas
     function initCanvas() {
@@ -646,10 +869,30 @@ const star6Game = (function() {
         ctx = canvas.getContext('2d');
         
         const updateSize = () => {
-            const maxW = Math.min(800, window.innerWidth - 40);
-            const maxH = Math.min(600, window.innerHeight * 0.65);
-            canvas.width = maxW;
-            canvas.height = maxH;
+            const container = document.querySelector('.star6-canvas-container');
+            if (!container) return;
+            
+            const containerWidth = container.clientWidth - 10;
+            const containerHeight = container.clientHeight - 10;
+            
+            // Mantener aspect ratio 4:3
+            const aspectRatio = 4 / 3;
+            let canvasWidth = containerWidth;
+            let canvasHeight = canvasWidth / aspectRatio;
+            
+            if (canvasHeight > containerHeight) {
+                canvasHeight = containerHeight;
+                canvasWidth = canvasHeight * aspectRatio;
+            }
+            
+            // Escalar para diferentes tamaños de pantalla
+            const baseWidth = 800;
+            const baseHeight = 600;
+            
+            canvas.width = baseWidth;
+            canvas.height = baseHeight;
+            canvas.style.width = canvasWidth + 'px';
+            canvas.style.height = canvasHeight + 'px';
             
             if (gameRunning) {
                 scaleLevel();
@@ -657,16 +900,25 @@ const star6Game = (function() {
         };
         
         updateSize();
-        window.addEventListener('resize', updateSize);
+        window.addEventListener('resize', () => {
+            updateSize();
+            checkOrientation();
+        });
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                updateSize();
+                checkOrientation();
+            }, 100);
+        });
+        
         return true;
     }
     
-    // Escalar nivel al tamaño del canvas
+    // Escalar nivel (sin cambios en la lógica)
     function scaleLevel() {
         const scaleX = canvas.width / 800;
         const scaleY = canvas.height / 600;
         
-        // Escalar plataformas
         platforms.forEach(p => {
             if (!p.originalX) {
                 p.originalX = p.x;
@@ -680,7 +932,6 @@ const star6Game = (function() {
             p.height = p.originalHeight * scaleY;
         });
         
-        // Escalar plataformas móviles
         movingPlatforms.forEach(p => {
             if (!p.originalX) {
                 p.originalX = p.x;
@@ -706,7 +957,6 @@ const star6Game = (function() {
             }
         });
         
-        // Escalar enemigos
         enemies.forEach(e => {
             if (!e.originalX) {
                 e.originalX = e.x;
@@ -724,7 +974,6 @@ const star6Game = (function() {
             e.maxX = e.originalMaxX * scaleX;
         });
         
-        // Escalar trampas
         traps.forEach(t => {
             if (!t.originalX) {
                 t.originalX = t.x;
@@ -738,7 +987,6 @@ const star6Game = (function() {
             t.height = t.originalHeight * scaleY;
         });
         
-        // Escalar corazones
         hearts.forEach(h => {
             if (!h.originalX) {
                 h.originalX = h.x;
@@ -752,7 +1000,6 @@ const star6Game = (function() {
             h.height = h.originalHeight * scaleY;
         });
         
-        // Escalar estrellas
         stars.forEach(s => {
             if (!s.originalX) {
                 s.originalX = s.x;
@@ -766,7 +1013,6 @@ const star6Game = (function() {
             s.height = s.originalHeight * scaleY;
         });
         
-        // Escalar power-ups
         powerUpItems.forEach(p => {
             if (!p.originalX) {
                 p.originalX = p.x;
@@ -785,10 +1031,9 @@ const star6Game = (function() {
     function loadLevel(levelNum) {
         const level = levels[levelNum - 1];
         if (!level) {
-            // Victoria final
             gameRunning = false;
             setTimeout(() => {
-                alert('🎉 ¡FELICIDADES! 🎉\n\n¡Has completado todos los niveles!\nSabia q lo lograrías\n\nPuntuación final: ' + score + '\n\n💖 Eres increíble, mi amor 💖\nPideme que quieres como premio');
+                alert('🎉 ¡FELICIDADES! 🎉\n\n¡Has completado todos los niveles!\nSabía que lo lograrías\n\nPuntuación final: ' + score + '\n\n💖 Eres increíble, mi amor 💖\nPídeme lo que quieras como premio');
                 resetGame();
             }, 100);
             return;
@@ -797,10 +1042,8 @@ const star6Game = (function() {
         currentLevel = levelNum;
         player.gravity = level.gravity;
         
-        // Actualizar UI
         document.getElementById('star6LevelNum').textContent = levelNum;
         
-        // Limpiar arrays
         platforms = [];
         movingPlatforms = [];
         enemies = [];
@@ -810,7 +1053,6 @@ const star6Game = (function() {
         powerUpItems = [];
         particles = [];
         
-        // Cargar datos del nivel
         level.platforms.forEach(p => platforms.push({...p, collected: false}));
         if (level.movingPlatforms) {
             level.movingPlatforms.forEach(p => movingPlatforms.push({...p}));
@@ -823,9 +1065,6 @@ const star6Game = (function() {
             level.powerups.forEach(p => powerUpItems.push({...p, collected: false}));
         }
         
-        console.log(`Nivel ${levelNum} cargado - Estrellas: ${stars.length}, Corazones: ${hearts.length}, Enemigos: ${enemies.length}`);
-        
-        // Reset jugador
         player.x = 50;
         player.y = canvas.height - 200;
         player.vx = 0;
@@ -835,6 +1074,28 @@ const star6Game = (function() {
         
         scaleLevel();
         updateStarsCounter();
+    }
+    
+    // Toggle pausa
+    function togglePause() {
+        gamePaused = !gamePaused;
+        const overlay = document.getElementById('star6PauseOverlay');
+        if (overlay) {
+            if (gamePaused) {
+                overlay.classList.add('active');
+            } else {
+                overlay.classList.remove('active');
+            }
+        }
+    }
+    
+    // Reiniciar nivel
+    function restart() {
+        gamePaused = false;
+        const overlay = document.getElementById('star6PauseOverlay');
+        if (overlay) overlay.classList.remove('active');
+        
+        loadLevel(currentLevel);
     }
     
     // Configurar controles
@@ -861,6 +1122,7 @@ const star6Game = (function() {
             if (e.key === 'ArrowLeft' || e.key === 'a') keys.left = true;
             if (e.key === 'ArrowRight' || e.key === 'd') keys.right = true;
             if (e.key === 'ArrowUp' || e.key === ' ' || e.key === 'w') jump();
+            if (e.key === 'Escape' || e.key === 'p') togglePause();
         });
         
         document.addEventListener('keyup', (e) => {
@@ -871,7 +1133,7 @@ const star6Game = (function() {
     
     // Salto
     function jump() {
-        if (!gameRunning) return;
+        if (!gameRunning || gamePaused) return;
         
         if (player.onGround) {
             player.vy = -player.jumpPower;
@@ -1035,6 +1297,7 @@ const star6Game = (function() {
         score = 0;
         health = 3;
         currentLevel = 1;
+        gamePaused = false;
         powerups = {
             invincible: false,
             doubleJump: false,
@@ -1046,6 +1309,9 @@ const star6Game = (function() {
         player.speed = 5;
         player.invincible = false;
         
+        const pauseOverlay = document.getElementById('star6PauseOverlay');
+        if (pauseOverlay) pauseOverlay.classList.remove('active');
+        
         updateScore(0);
         updateHealth();
         loadLevel(1);
@@ -1054,26 +1320,21 @@ const star6Game = (function() {
     
     // Actualizar física
     function update() {
-        if (!gameRunning) return;
+        if (!gameRunning || gamePaused) return;
         
-        // Movimiento
         let currentSpeed = player.speed;
         if (keys.left) player.vx = -currentSpeed;
         else if (keys.right) player.vx = currentSpeed;
         else player.vx = 0;
         
-        // Gravedad
         player.vy += player.gravity;
         
-        // Aplicar velocidad
         player.x += player.vx;
         player.y += player.vy;
         
-        // Límites
         if (player.x < 0) player.x = 0;
         if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
         
-        // Colisiones con plataformas
         player.onGround = false;
         const allPlatforms = [...platforms, ...movingPlatforms];
         
@@ -1089,7 +1350,6 @@ const star6Game = (function() {
                 player.onGround = true;
                 player.jumpsLeft = powerups.doubleJump ? 1 : 0;
                 
-                // Si es plataforma móvil, mover al jugador con ella
                 if (plat.speed) {
                     if (plat.vertical) {
                         player.y += plat.speed * plat.dir;
@@ -1100,7 +1360,6 @@ const star6Game = (function() {
             }
         });
         
-        // Mover plataformas móviles
         movingPlatforms.forEach(plat => {
             if (plat.vertical) {
                 plat.y += plat.speed * plat.dir;
@@ -1115,14 +1374,12 @@ const star6Game = (function() {
             }
         });
         
-        // Mover enemigos
         enemies.forEach(enemy => {
             enemy.x += enemy.speed * enemy.dir;
             if (enemy.x <= enemy.minX || enemy.x + enemy.width >= enemy.maxX) {
                 enemy.dir *= -1;
             }
             
-            // Colisión con jugador
             if (player.x + player.width > enemy.x &&
                 player.x < enemy.x + enemy.width &&
                 player.y + player.height > enemy.y &&
@@ -1131,7 +1388,6 @@ const star6Game = (function() {
             }
         });
         
-        // Colisión con trampas
         traps.forEach(trap => {
             if (player.x + player.width > trap.x &&
                 player.x < trap.x + trap.width &&
@@ -1141,7 +1397,6 @@ const star6Game = (function() {
             }
         });
         
-        // Colectar corazones
         hearts.forEach(heart => {
             if (!heart.collected &&
                 player.x + player.width > heart.x &&
@@ -1156,7 +1411,6 @@ const star6Game = (function() {
             }
         });
         
-        // Colectar estrellas
         stars.forEach(star => {
             if (!star.collected &&
                 player.x + player.width > star.x &&
@@ -1171,7 +1425,6 @@ const star6Game = (function() {
             }
         });
         
-        // Colectar power-ups
         powerUpItems.forEach(item => {
             if (!item.collected &&
                 player.x + player.width > item.x &&
@@ -1186,7 +1439,6 @@ const star6Game = (function() {
             }
         });
         
-        // Actualizar timers de power-ups
         const indicator = document.getElementById('star6PowerupIndicator');
         
         if (powerups.invincibleTimer > 0) {
@@ -1219,7 +1471,6 @@ const star6Game = (function() {
             }
         }
         
-        // Actualizar partículas
         particles = particles.filter(p => {
             p.x += p.vx;
             p.y += p.vy;
@@ -1228,29 +1479,19 @@ const star6Game = (function() {
             return p.life > 0;
         });
         
-        // Caída al vacío
         if (player.y > canvas.height + 100) {
             damagePlayer();
         }
         
-        // Verificar nivel completado
         if (stars.length > 0) {
             const allStarsCollected = stars.every(s => s.collected);
-            const totalStars = stars.length;
-            const collectedStars = stars.filter(s => s.collected).length;
-            
-            if (collectedStars > 0 && collectedStars % 1 === 0) {
-                console.log(`⭐ Progreso: ${collectedStars}/${totalStars} estrellas`);
-            }
             
             if (allStarsCollected) {
-                console.log('🎉 ¡Nivel completado! Todas las estrellas recolectadas');
                 stars.length = 0;
                 showLevelComplete();
             }
         }
         
-        // Flash de invencibilidad
         if (player.invincible) {
             player.invincibleFlash = (player.invincibleFlash + 0.3) % (Math.PI * 2);
         }
@@ -1258,21 +1499,18 @@ const star6Game = (function() {
     
     // Dibujar
     function draw() {
-        // Cielo
         const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
         gradient.addColorStop(0, '#87ceeb');
         gradient.addColorStop(1, '#b0e0e6');
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         
-        // Nubes
         ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
         drawCloud(canvas.width * 0.15, 60, 40);
         drawCloud(canvas.width * 0.65, 90, 50);
         drawCloud(canvas.width * 0.85, 70, 35);
         
-        // Plataformas
-        platforms.forEach((plat, i) => {
+        platforms.forEach(plat => {
             ctx.fillStyle = '#8b4513';
             ctx.fillRect(plat.x, plat.y, plat.width, plat.height);
             
@@ -1282,7 +1520,6 @@ const star6Game = (function() {
             }
         });
         
-        // Plataformas móviles
         movingPlatforms.forEach(plat => {
             ctx.fillStyle = '#cd853f';
             ctx.fillRect(plat.x, plat.y, plat.width, plat.height);
@@ -1296,7 +1533,6 @@ const star6Game = (function() {
             ctx.setLineDash([]);
         });
         
-        // Trampas
         traps.forEach(trap => {
             if (trap.type === 'spikes') {
                 ctx.fillStyle = '#696969';
@@ -1321,7 +1557,6 @@ const star6Game = (function() {
             }
         });
         
-        // Enemigos
         enemies.forEach(enemy => {
             ctx.fillStyle = '#9370db';
             ctx.beginPath();
@@ -1342,7 +1577,6 @@ const star6Game = (function() {
             ctx.fill();
         });
         
-        // Corazones
         ctx.font = '24px Arial';
         hearts.forEach(heart => {
             if (!heart.collected) {
@@ -1350,7 +1584,6 @@ const star6Game = (function() {
             }
         });
         
-        // Estrellas
         ctx.font = '18px Arial';
         stars.forEach(star => {
             if (!star.collected) {
@@ -1358,7 +1591,6 @@ const star6Game = (function() {
             }
         });
         
-        // Power-ups
         ctx.font = '20px Arial';
         powerUpItems.forEach(item => {
             if (!item.collected) {
@@ -1371,7 +1603,6 @@ const star6Game = (function() {
             }
         });
         
-        // Jugador
         if (player.invincible) {
             const alpha = Math.abs(Math.sin(player.invincibleFlash));
             ctx.globalAlpha = 0.3 + alpha * 0.7;
@@ -1385,7 +1616,6 @@ const star6Game = (function() {
         ctx.fillStyle = player.color;
         ctx.fillRect(player.x, player.y, player.width, player.height);
         
-        // Cara
         ctx.fillStyle = '#fff';
         ctx.fillRect(player.x + 8, player.y + 8, 6, 6);
         ctx.fillRect(player.x + 18, player.y + 8, 6, 6);
@@ -1398,7 +1628,6 @@ const star6Game = (function() {
         
         ctx.globalAlpha = 1;
         
-        // Partículas
         particles.forEach(p => {
             ctx.fillStyle = p.color;
             ctx.globalAlpha = p.life / p.maxLife;
@@ -1409,7 +1638,6 @@ const star6Game = (function() {
         ctx.globalAlpha = 1;
     }
     
-    // Dibujar nube
     function drawCloud(x, y, size) {
         ctx.beginPath();
         ctx.arc(x, y, size * 0.6, 0, Math.PI * 2);
@@ -1418,17 +1646,16 @@ const star6Game = (function() {
         ctx.fill();
     }
     
-    // Loop principal
     function gameLoop() {
         update();
         draw();
         animationId = requestAnimationFrame(gameLoop);
     }
     
-    // Iniciar
     function start() {
         if (!initCanvas()) return;
         setupControls();
+        checkOrientation();
         loadLevel(1);
         updateHealth();
         updateScore(0);
@@ -1436,7 +1663,6 @@ const star6Game = (function() {
         gameLoop();
     }
     
-    // Detener
     function stop() {
         gameRunning = false;
         if (animationId) {
@@ -1445,16 +1671,17 @@ const star6Game = (function() {
         }
     }
     
-    // API pública
     return {
         start: start,
         stop: stop,
         closeLoveMessage: closeLoveMessage,
-        nextLevel: nextLevel
+        nextLevel: nextLevel,
+        dismissOrientationWarning: dismissOrientationWarning,
+        togglePause: togglePause,
+        restart: restart
     };
 })();
 
-// Auto-iniciar
 document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
         star6Game.start();
@@ -1462,10 +1689,10 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function goBackSafe() {
-  if (document.referrer) {
-    history.back();
-  } else {
-    window.location.href = "index.html"; // o la página principal
-  }
+    if (document.referrer) {
+        history.back();
+    } else {
+        window.location.href = "index.html";
+    }
 }
 </script>
