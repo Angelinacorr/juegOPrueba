@@ -1509,14 +1509,6 @@ const star6Game = (function() {
                 heart.collected = true;
                 createParticles(heart.x + heart.width / 2, heart.y + heart.height / 2, '#ff69b4', 15);
                 updateScore(100);
-                
-                // Aumentar vida (máximo 3 corazones)
-                if (health < 3) {
-                    health++;
-                    updateHealth();
-                    createParticles(player.x + player.width / 2, player.y + player.height / 2, '#ff1493', 20);
-                }
-                
                 showLoveMessage();
             }
         });
