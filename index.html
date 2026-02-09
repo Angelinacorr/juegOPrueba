@@ -265,18 +265,18 @@
     order: 2; /* Canvas en el medio */
 }
 
-/* Controles ABAJO pero MÁS ARRIBA (más visibles) */
+/* Controles ABAJO pero MÁS ARRIBA (más visibles) - MODIFICADO */
 #starPage6 .star6-controls {
     position: relative;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 15px;
-    padding: 15px 20px 12px 20px; /* Más padding arriba para elevarlos */
+    padding: 18px 20px 15px 20px; /* MODIFICADO: más padding arriba y abajo */
     background: linear-gradient(to top, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.95));
     box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.15);
     z-index: 100;
-    min-height: 100px; /* Aumentado para más espacio */
-    order: 3; /* Controles al final */
+    min-height: 110px; /* MODIFICADO: aumentado de 100px a 110px */
+    order: 3;
     border-top: 2px solid rgba(255, 107, 157, 0.1);
 }
 #starPage6 .star6-controls-left {
@@ -469,8 +469,8 @@
     }
     
     #starPage6 .star6-controls {
-        padding: 12px 25px 10px 25px;
-        min-height: 92px;
+        padding: 15px 25px 12px 25px; /* MODIFICADO: más padding */
+        min-height: 100px; /* MODIFICADO: altura mínima */
     }
     
     #starPage6 .star6-btn {
@@ -501,8 +501,8 @@
     }
     
     #starPage6 .star6-controls {
-        padding: 15px 30px 12px 30px;
-        min-height: 100px;
+        padding: 18px 30px 15px 30px; /* MODIFICADO */
+        min-height: 108px; /* MODIFICADO */
     }
 }
 /* Ajustes para pantallas muy pequeñas */
@@ -513,8 +513,8 @@
     }
     
     #starPage6 .star6-controls {
-        padding: 10px 18px 8px 18px;
-        min-height: 82px;
+        padding: 12px 18px 10px 18px; /* MODIFICADO */
+        min-height: 90px; /* MODIFICADO */
     }
     
     #starPage6 .star6-btn {
@@ -544,8 +544,8 @@
 /* Ajuste específico para pantallas MUY cortas (algunos móviles en landscape) */
 @media (max-height: 400px) and (orientation: landscape) {
     #starPage6 .star6-controls {
-        padding: 8px 15px 6px 15px;
-        min-height: 75px;
+        padding: 10px 15px 8px 15px; /* MODIFICADO */
+        min-height: 82px; /* MODIFICADO */
     }
     
     #starPage6 .star6-btn {
@@ -862,7 +862,7 @@ const star6Game = (function() {
         }
     }
     
-    // Forzar pantalla completa
+    // MODIFICADO: Forzar pantalla completa de forma más agresiva
     function enterFullscreen() {
         const elem = document.getElementById('starPage6');
         if (!elem) return;
@@ -890,12 +890,20 @@ const star6Game = (function() {
                (window.matchMedia && window.matchMedia("(max-width: 768px)").matches);
     }
     
-    // Intentar fullscreen en interacción del usuario (necesario en móviles)
-    function tryFullscreenOnInteraction() {
+    // MODIFICADO: Intentar fullscreen inmediatamente al cargar
+    function forceFullscreenOnLoad() {
+        // Intentar inmediatamente
         enterFullscreen();
-        // Remover el listener después del primer intento
-        document.removeEventListener('touchstart', tryFullscreenOnInteraction);
-        document.removeEventListener('click', tryFullscreenOnInteraction);
+        
+        // Intentar de nuevo después de un delay corto
+        setTimeout(() => {
+            enterFullscreen();
+        }, 100);
+        
+        // Y una vez más por si acaso
+        setTimeout(() => {
+            enterFullscreen();
+        }, 500);
     }
     
     // Configurar controles por gestos
@@ -921,6 +929,9 @@ const star6Game = (function() {
         touchStartY = touch.clientY;
         touchStartTime = Date.now();
         isSwiping = false;
+        
+        // NUEVO: Intentar fullscreen en cada touch
+        enterFullscreen();
     }
     
     function handleTouchMove(e) {
@@ -1251,11 +1262,11 @@ const star6Game = (function() {
         
         if (!btnLeft || !btnRight || !btnJump) return;
         
-        btnLeft.addEventListener('touchstart', (e) => { e.preventDefault(); keys.left = true; });
+        btnLeft.addEventListener('touchstart', (e) => { e.preventDefault(); keys.left = true; enterFullscreen(); }); // MODIFICADO
         btnLeft.addEventListener('touchend', (e) => { e.preventDefault(); keys.left = false; });
-        btnRight.addEventListener('touchstart', (e) => { e.preventDefault(); keys.right = true; });
+        btnRight.addEventListener('touchstart', (e) => { e.preventDefault(); keys.right = true; enterFullscreen(); }); // MODIFICADO
         btnRight.addEventListener('touchend', (e) => { e.preventDefault(); keys.right = false; });
-        btnJump.addEventListener('touchstart', (e) => { e.preventDefault(); jump(); });
+        btnJump.addEventListener('touchstart', (e) => { e.preventDefault(); jump(); enterFullscreen(); }); // MODIFICADO
         
         btnLeft.addEventListener('mousedown', () => keys.left = true);
         btnLeft.addEventListener('mouseup', () => keys.left = false);
@@ -1808,25 +1819,11 @@ const star6Game = (function() {
     function start() {
         if (!initCanvas()) return;
         setupControls();
-        setupGestureControls(); // NUEVO: Configurar gestos
+        setupGestureControls();
         checkOrientation();
         
-        // Intentar entrar en pantalla completa automáticamente
-        if (isMobileDevice()) {
-            // En móviles, esperar a la primera interacción del usuario
-            document.addEventListener('touchstart', tryFullscreenOnInteraction, { once: true });
-            document.addEventListener('click', tryFullscreenOnInteraction, { once: true });
-            
-            // Intentar inmediatamente (puede funcionar en algunos navegadores)
-            setTimeout(() => {
-                enterFullscreen();
-            }, 300);
-        } else {
-            // En desktop, intentar después de un delay
-            setTimeout(() => {
-                enterFullscreen();
-            }, 500);
-        }
+        // MODIFICADO: Forzar pantalla completa inmediatamente
+        forceFullscreenOnLoad();
         
         loadLevel(1);
         updateHealth();
