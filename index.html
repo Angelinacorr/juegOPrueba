@@ -1,0 +1,1471 @@
+<!-- ============================================ -->
+<!-- JUEGO MEJORADO PARA #starPage6 - CON NIVELES Y TRAMPAS -->
+<!-- ============================================ -->
+
+<!-- 1. REEMPLAZA TODO EL CONTENIDO DE #starPage6 CON ESTO: -->
+
+<div id="starPage6" class="page star-page">
+    <div class="star6-game-wrapper">
+        <!-- Header del juego -->
+        <div class="star6-header">
+            <div class="star6-health" id="star6Health">
+                <span class="star6-heart">💖</span>
+                <span class="star6-heart">💖</span>
+                <span class="star6-heart">💖</span>
+            </div>
+            <div class="star6-level-info">
+                <div class="star6-score">⭐ <span id="star6Score">0</span></div>
+                <div class="star6-level">Nivel <span id="star6LevelNum">1</span></div>
+                <div class="star6-stars-counter" id="star6StarsCounter">Estrellas: <span id="star6StarsCount">0/0</span></div>
+            </div>
+            <button class="star6-back-btn" onclick="goBackSafe()">← Volver</button>
+        </div>
+
+        <!-- Canvas del juego -->
+        <canvas id="star6Canvas"></canvas>
+
+        <!-- Controles táctiles -->
+        <div class="star6-controls">
+            <button class="star6-btn star6-btn-left" id="star6BtnLeft">◄</button>
+            <button class="star6-btn star6-btn-jump" id="star6BtnJump">▲</button>
+            <button class="star6-btn star6-btn-right" id="star6BtnRight">►</button>
+        </div>
+
+        <!-- Overlay de mensaje romántico -->
+        <div class="star6-message-overlay" id="star6MessageOverlay">
+            <div class="star6-message-card">
+                <h2>💌 Mensaje de Amor</h2>
+                <p id="star6MessageText"></p>
+                <button class="star6-message-btn" onclick="star6Game.closeLoveMessage()">Continuar ✨</button>
+            </div>
+        </div>
+
+        <!-- Overlay de nivel completado -->
+        <div class="star6-message-overlay" id="star6LevelComplete">
+            <div class="star6-message-card">
+                <h2>🎉 ¡Nivel Completado!</h2>
+                <p id="star6LevelCompleteText"></p>
+                <button class="star6-message-btn" onclick="star6Game.nextLevel()">Siguiente Nivel →</button>
+            </div>
+        </div>
+
+        <!-- Indicador de power-up activo -->
+        <div class="star6-powerup-indicator" id="star6PowerupIndicator"></div>
+    </div>
+</div>
+
+<!-- ============================================ -->
+<!-- 2. AGREGA ESTOS ESTILOS A TU CSS -->
+<!-- ============================================ -->
+
+<style>
+/* Estilos exclusivos para Star Page 6 - Juego Mejorado */
+#starPage6 {
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+}
+
+#starPage6 .star6-game-wrapper {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* Header */
+#starPage6 .star6-header {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+    z-index: 100;
+}
+
+#starPage6 .star6-health {
+    display: flex;
+    gap: 6px;
+}
+
+#starPage6 .star6-heart {
+    font-size: 26px;
+    filter: drop-shadow(2px 2px 4px rgba(255, 107, 157, 0.4));
+    animation: star6-heartbeat 1.5s ease-in-out infinite;
+}
+
+#starPage6 .star6-level-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+}
+
+#starPage6 .star6-score,
+#starPage6 .star6-level,
+#starPage6 .star6-stars-counter {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 16px;
+    color: #ff6b9d;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+#starPage6 .star6-level {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-size: 14px;
+}
+
+#starPage6 .star6-stars-counter {
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    color: #8b4513;
+    font-size: 14px;
+}
+
+#starPage6 .star6-back-btn {
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 14px;
+    color: #ff6b9d;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s;
+}
+
+#starPage6 .star6-back-btn:active {
+    transform: scale(0.95);
+}
+
+/* Canvas */
+#starPage6 #star6Canvas {
+    max-width: 95%;
+    max-height: 65vh;
+    border: 5px solid #fff;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    background: #87ceeb;
+    image-rendering: crisp-edges;
+}
+
+/* Controles */
+#starPage6 .star6-controls {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-around;
+    padding: 0 25px;
+    z-index: 100;
+}
+
+#starPage6 .star6-btn {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.95);
+    color: #ff6b9d;
+    font-size: 30px;
+    font-weight: bold;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: all 0.1s;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+#starPage6 .star6-btn:active {
+    transform: scale(0.85);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+#starPage6 .star6-btn-jump {
+    background: linear-gradient(135deg, #ff6b9d 0%, #ff8fab 100%);
+    color: white;
+    width: 75px;
+    height: 75px;
+    font-size: 26px;
+    box-shadow: 0 8px 25px rgba(255, 107, 157, 0.5);
+}
+
+/* Mensaje romántico y nivel completado */
+#starPage6 .star6-message-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: star6-fadeIn 0.4s ease;
+}
+
+#starPage6 .star6-message-overlay.active {
+    display: flex;
+}
+
+#starPage6 .star6-message-card {
+    background: linear-gradient(135deg, #fff5f7 0%, #ffe8ec 100%);
+    border-radius: 25px;
+    padding: 30px;
+    max-width: 90%;
+    max-height: 80%;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(255, 107, 157, 0.6);
+    animation: star6-scaleIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+#starPage6 .star6-message-card h2 {
+    color: #ff6b9d;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    text-shadow: 2px 2px 4px rgba(255, 107, 157, 0.2);
+}
+
+#starPage6 .star6-message-card p {
+    color: #555;
+    line-height: 1.8;
+    font-size: 17px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#starPage6 .star6-message-btn {
+    padding: 14px 32px;
+    background: linear-gradient(135deg, #ff6b9d 0%, #ff8fab 100%);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
+    box-shadow: 0 6px 20px rgba(255, 107, 157, 0.4);
+    transition: all 0.3s;
+}
+
+#starPage6 .star6-message-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 3px 10px rgba(255, 107, 157, 0.4);
+}
+
+/* Indicador de power-up */
+#starPage6 .star6-powerup-indicator {
+    position: absolute;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 215, 0, 0.95);
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 16px;
+    color: #8b4513;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5);
+    display: none;
+    animation: star6-bounce 0.6s ease-in-out infinite;
+    z-index: 99;
+}
+
+/* Animaciones */
+@keyframes star6-heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+}
+
+@keyframes star6-fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes star6-scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.3) rotate(-5deg);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+    }
+}
+
+@keyframes star6-bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-10px); }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    #starPage6 .star6-btn {
+        width: 60px;
+        height: 60px;
+        font-size: 26px;
+    }
+    
+    #starPage6 .star6-btn-jump {
+        width: 65px;
+        height: 65px;
+    }
+    
+    #starPage6 .star6-heart {
+        font-size: 22px;
+    }
+    
+    #starPage6 .star6-score,
+    #starPage6 .star6-level,
+    #starPage6 .star6-stars-counter {
+        font-size: 14px;
+        padding: 5px 12px;
+    }
+    
+    #starPage6 .star6-message-card {
+        padding: 25px;
+    }
+    
+    #starPage6 .star6-message-card h2 {
+        font-size: 20px;
+    }
+    
+    #starPage6 .star6-message-card p {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 400px) {
+    #starPage6 .star6-controls {
+        padding: 0 15px;
+    }
+    
+    #starPage6 .star6-btn {
+        width: 55px;
+        height: 55px;
+        font-size: 24px;
+    }
+    
+    #starPage6 .star6-btn-jump {
+        width: 58px;
+        height: 58px;
+    }
+    
+    #starPage6 .star6-header {
+        padding: 0 10px;
+    }
+}
+</style>
+
+<!-- ============================================ -->
+<!-- 3. AGREGA ESTE JAVASCRIPT AL FINAL DE TU ARCHIVO HTML -->
+<!-- ============================================ -->
+
+<script>
+// Juego de la Estrella 6 - Versión Mejorada con Niveles y Trampas
+const star6Game = (function() {
+    'use strict';
+    
+    // Variables principales
+    let canvas, ctx;
+    let score = 0;
+    let health = 3;
+    let currentLevel = 1;
+    let gameRunning = false;
+    let animationId = null;
+    
+    // Power-ups
+    let powerups = {
+        invincible: false,
+        doubleJump: false,
+        speedBoost: false,
+        invincibleTimer: 0,
+        doubleJumpTimer: 0,
+        speedBoostTimer: 0
+    };
+    
+    // Mensajes románticos
+    const loveMessages = [
+        "Cada momento contigo es un tesoro invaluable que guardo en mi corazón 💝\n\n¡Eres increíble!",
+        "Eres la razón por la que mi corazón late con tanta alegría cada día ❤️\n\nGracias por ser tú.",
+        "Tu sonrisa ilumina mi mundo entero como mil estrellas brillantes ✨\n\n¡Sigue brillando!",
+        "Gracias por existir y hacer mi vida mucho más bella y especial 🌹\n\nEres único.",
+        "Eres mi persona favorita en todo el universo infinito 🌟\n\nY siempre lo serás.",
+        "Contigo, cada día es una aventura mágica llena de amor 🦋\n\n¡Vamos juntos!",
+        "Mi amor por ti crece más y más con cada segundo que pasa 💕\n\nEres mi todo.",
+        "Eres el mejor regalo que la vida me ha dado, mi tesoro 🎁\n\nTe amo infinito."
+    ];
+    
+    // Controles
+    const keys = { left: false, right: false };
+    
+    // Jugador
+    const player = {
+        x: 50,
+        y: 0,
+        width: 32,
+        height: 32,
+        vx: 0,
+        vy: 0,
+        speed: 5,
+        jumpPower: 13,
+        gravity: 0.6,
+        onGround: false,
+        jumpsLeft: 1,
+        color: '#ff6b9d',
+        invincible: false,
+        invincibleFlash: 0
+    };
+    
+    // Arrays del juego
+    let platforms = [];
+    let enemies = [];
+    let hearts = [];
+    let stars = [];
+    let traps = [];
+    let powerUpItems = [];
+    let particles = [];
+    let movingPlatforms = [];
+    
+    // Definición de niveles
+    const levels = [
+        // Nivel 1 - Tutorial básico
+        {
+            name: "Comienzo Romántico",
+            gravity: 0.6,
+            platforms: [
+                { x: 0, y: 550, width: 800, height: 50, type: 'ground' },
+                { x: 200, y: 450, width: 150, height: 20, type: 'normal' },
+                { x: 450, y: 350, width: 120, height: 20, type: 'normal' },
+                { x: 150, y: 250, width: 180, height: 20, type: 'normal' }
+            ],
+            enemies: [
+                { x: 320, y: 510, width: 28, height: 28, speed: 2, dir: 1, minX: 100, maxX: 500 }
+            ],
+            traps: [
+                { x: 600, y: 530, width: 50, height: 20, type: 'spikes' }
+            ],
+            hearts: [
+                { x: 280, y: 420, width: 24, height: 24 }
+            ],
+            stars: [
+                { x: 220, y: 420, width: 18, height: 18 },
+                { x: 500, y: 320, width: 18, height: 18 },
+                { x: 230, y: 220, width: 18, height: 18 }
+            ],
+            powerups: []
+        },
+        // Nivel 2 - Plataformas móviles
+        {
+            name: "Baile de Plataformas",
+            gravity: 0.6,
+            platforms: [
+                { x: 0, y: 550, width: 800, height: 50, type: 'ground' },
+                { x: 150, y: 450, width: 100, height: 20, type: 'normal' },
+                { x: 550, y: 350, width: 120, height: 20, type: 'normal' }
+            ],
+            movingPlatforms: [
+                { x: 300, y: 400, width: 100, height: 20, speed: 2, minX: 300, maxX: 500, dir: 1 },
+                { x: 200, y: 250, width: 100, height: 20, speed: 1.5, minY: 200, maxY: 350, dir: 1, vertical: true }
+            ],
+            enemies: [
+                { x: 400, y: 510, width: 28, height: 28, speed: 2.5, dir: 1, minX: 200, maxX: 600 },
+                { x: 600, y: 310, width: 28, height: 28, speed: 2, dir: -1, minX: 550, maxX: 670 }
+            ],
+            traps: [
+                { x: 100, y: 530, width: 80, height: 20, type: 'spikes' },
+                { x: 700, y: 530, width: 60, height: 20, type: 'spikes' }
+            ],
+            hearts: [
+                { x: 350, y: 370, width: 24, height: 24 }
+            ],
+            stars: [
+                { x: 200, y: 420, width: 18, height: 18 },
+                { x: 400, y: 370, width: 18, height: 18 },
+                { x: 600, y: 320, width: 18, height: 18 },
+                { x: 250, y: 220, width: 18, height: 18 }
+            ],
+            powerups: [
+                { x: 580, y: 320, width: 20, height: 20, type: 'speed' }
+            ]
+        },
+        // Nivel 3 - Laberinto de amor (balanceado)
+        {
+            name: "Laberinto del Corazón",
+            gravity: 0.6,
+            platforms: [
+                { x: 0, y: 550, width: 220, height: 50, type: 'ground' },
+                { x: 300, y: 550, width: 500, height: 50, type: 'ground' },
+                { x: 100, y: 450, width: 130, height: 20, type: 'normal' },
+                { x: 350, y: 400, width: 100, height: 20, type: 'normal' },
+                { x: 500, y: 320, width: 120, height: 20, type: 'normal' },
+                { x: 640, y: 240, width: 120, height: 20, type: 'normal' },
+                { x: 380, y: 180, width: 180, height: 20, type: 'normal' }
+            ],
+            enemies: [
+                { x: 350, y: 510, width: 28, height: 28, speed: 2, dir: 1, minX: 300, maxX: 550 },
+                { x: 550, y: 280, width: 28, height: 28, speed: 2, dir: -1, minX: 500, maxX: 620 }
+            ],
+            traps: [
+                { x: 235, y: 530, width: 55, height: 20, type: 'spikes' },
+                { x: 250, y: 380, width: 45, height: 20, type: 'fire' },
+                { x: 460, y: 300, width: 35, height: 20, type: 'fire' }
+            ],
+            hearts: [
+                { x: 670, y: 210, width: 24, height: 24 }
+            ],
+            stars: [
+                { x: 150, y: 420, width: 18, height: 18 },
+                { x: 380, y: 370, width: 18, height: 18 },
+                { x: 530, y: 290, width: 18, height: 18 },
+                { x: 670, y: 210, width: 18, height: 18 },
+                { x: 450, y: 150, width: 18, height: 18 }
+            ],
+            powerups: [
+                { x: 120, y: 420, width: 20, height: 20, type: 'speed' }
+            ]
+        },
+        // Nivel 4 - Desafío divertido (mejorado)
+        {
+            name: "Prueba de Amor Verdadero",
+            gravity: 0.6,
+            platforms: [
+                { x: 0, y: 550, width: 200, height: 50, type: 'ground' },
+                { x: 600, y: 550, width: 200, height: 50, type: 'ground' },
+                { x: 180, y: 470, width: 120, height: 20, type: 'normal' },
+                { x: 500, y: 470, width: 120, height: 20, type: 'normal' },
+                { x: 100, y: 370, width: 140, height: 20, type: 'normal' },
+                { x: 560, y: 370, width: 140, height: 20, type: 'normal' },
+                { x: 320, y: 270, width: 160, height: 20, type: 'normal' },
+                { x: 200, y: 170, width: 400, height: 20, type: 'normal' }
+            ],
+            movingPlatforms: [
+                { x: 350, y: 400, width: 100, height: 20, speed: 2, minX: 320, maxX: 480, dir: 1 }
+            ],
+            enemies: [
+                { x: 100, y: 510, width: 28, height: 28, speed: 2, dir: 1, minX: 0, maxX: 200 },
+                { x: 650, y: 510, width: 28, height: 28, speed: 2, dir: -1, minX: 600, maxX: 800 },
+                { x: 380, y: 430, width: 28, height: 28, speed: 1.5, dir: 1, minX: 350, maxX: 450 }
+            ],
+            traps: [
+                { x: 220, y: 530, width: 360, height: 20, type: 'spikes' },
+                { x: 260, y: 450, width: 50, height: 20, type: 'fire' },
+                { x: 490, y: 450, width: 50, height: 20, type: 'fire' }
+            ],
+            hearts: [
+                { x: 400, y: 240, width: 24, height: 24 }
+            ],
+            stars: [
+                { x: 220, y: 440, width: 18, height: 18 },
+                { x: 560, y: 440, width: 18, height: 18 },
+                { x: 150, y: 340, width: 18, height: 18 },
+                { x: 620, y: 340, width: 18, height: 18 },
+                { x: 380, y: 240, width: 18, height: 18 },
+                { x: 300, y: 140, width: 18, height: 18 },
+                { x: 500, y: 140, width: 18, height: 18 }
+            ],
+            powerups: [
+                { x: 390, y: 370, width: 20, height: 20, type: 'doubleJump' },
+                { x: 120, y: 340, width: 20, height: 20, type: 'invincible' }
+            ]
+        },
+        // Nivel 5 - Final épico (balanceado y más accesible)
+        {
+            name: "El Castillo del Amor Eterno",
+            gravity: 0.6,
+            platforms: [
+                { x: 0, y: 550, width: 120, height: 50, type: 'ground' },
+                { x: 680, y: 550, width: 120, height: 50, type: 'ground' },
+                { x: 150, y: 480, width: 80, height: 20, type: 'normal' },
+                { x: 570, y: 480, width: 80, height: 20, type: 'normal' },
+                { x: 100, y: 390, width: 100, height: 20, type: 'normal' },
+                { x: 600, y: 390, width: 100, height: 20, type: 'normal' },
+                { x: 240, y: 310, width: 110, height: 20, type: 'normal' },
+                { x: 450, y: 310, width: 110, height: 20, type: 'normal' },
+                { x: 330, y: 230, width: 140, height: 20, type: 'normal' },
+                { x: 280, y: 180, width: 240, height: 20, type: 'normal' } // CAMBIADO: antes era y: 130
+            ],
+            movingPlatforms: [
+                { x: 300, y: 440, width: 120, height: 20, speed: 2.5, minX: 280, maxX: 480, dir: 1 },
+                { x: 180, y: 350, width: 90, height: 20, speed: 2, minY: 280, maxY: 400, dir: 1, vertical: true }
+            ],
+            enemies: [
+                { x: 60, y: 510, width: 28, height: 28, speed: 2.5, dir: 1, minX: 0, maxX: 120 },
+                { x: 730, y: 510, width: 28, height: 28, speed: 2.5, dir: -1, minX: 680, maxX: 800 },
+                { x: 180, y: 440, width: 28, height: 28, speed: 2, dir: 1, minX: 150, maxX: 230 },
+                { x: 600, y: 440, width: 28, height: 28, speed: 2, dir: -1, minX: 570, maxX: 650 },
+                { x: 270, y: 270, width: 28, height: 28, speed: 1.8, dir: 1, minX: 240, maxX: 350 },
+                { x: 480, y: 270, width: 28, height: 28, speed: 1.8, dir: -1, minX: 450, maxX: 560 }
+            ],
+            traps: [
+                { x: 135, y: 530, width: 530, height: 20, type: 'spikes' },
+                { x: 250, y: 460, width: 300, height: 20, type: 'fire' },
+                { x: 370, y: 290, width: 60, height: 20, type: 'fire' }
+            ],
+            hearts: [
+                { x: 380, y: 200, width: 24, height: 24 }, // Ajustado para nueva plataforma
+                { x: 400, y: 150, width: 24, height: 24 }  // Ajustado para nueva plataforma
+            ],
+            stars: [
+                { x: 180, y: 450, width: 18, height: 18 },
+                { x: 600, y: 450, width: 18, height: 18 },
+                { x: 140, y: 360, width: 18, height: 18 },
+                { x: 640, y: 360, width: 18, height: 18 },
+                { x: 270, y: 280, width: 18, height: 18 },
+                { x: 490, y: 280, width: 18, height: 18 },
+                { x: 370, y: 200, width: 18, height: 18 },
+                { x: 340, y: 150, width: 18, height: 18 }, // Ajustado
+                { x: 460, y: 150, width: 18, height: 18 }  // Ajustado
+            ],
+            powerups: [
+                { x: 360, y: 410, width: 20, height: 20, type: 'invincible' },
+                { x: 380, y: 280, width: 20, height: 20, type: 'doubleJump' },
+                { x: 150, y: 360, width: 20, height: 20, type: 'speed' }
+            ]
+        }
+    ];
+    
+    // Inicializar canvas
+    function initCanvas() {
+        canvas = document.getElementById('star6Canvas');
+        if (!canvas) return false;
+        
+        ctx = canvas.getContext('2d');
+        
+        const updateSize = () => {
+            const maxW = Math.min(800, window.innerWidth - 40);
+            const maxH = Math.min(600, window.innerHeight * 0.65);
+            canvas.width = maxW;
+            canvas.height = maxH;
+            
+            if (gameRunning) {
+                scaleLevel();
+            }
+        };
+        
+        updateSize();
+        window.addEventListener('resize', updateSize);
+        return true;
+    }
+    
+    // Escalar nivel al tamaño del canvas
+    function scaleLevel() {
+        const scaleX = canvas.width / 800;
+        const scaleY = canvas.height / 600;
+        
+        // Escalar plataformas
+        platforms.forEach(p => {
+            if (!p.originalX) {
+                p.originalX = p.x;
+                p.originalY = p.y;
+                p.originalWidth = p.width;
+                p.originalHeight = p.height;
+            }
+            p.x = p.originalX * scaleX;
+            p.y = p.originalY * scaleY;
+            p.width = p.originalWidth * scaleX;
+            p.height = p.originalHeight * scaleY;
+        });
+        
+        // Escalar plataformas móviles
+        movingPlatforms.forEach(p => {
+            if (!p.originalX) {
+                p.originalX = p.x;
+                p.originalY = p.y;
+                p.originalWidth = p.width;
+                p.originalHeight = p.height;
+                p.originalMinX = p.minX;
+                p.originalMaxX = p.maxX;
+                p.originalMinY = p.minY;
+                p.originalMaxY = p.maxY;
+            }
+            p.x = p.originalX * scaleX;
+            p.y = p.originalY * scaleY;
+            p.width = p.originalWidth * scaleX;
+            p.height = p.originalHeight * scaleY;
+            if (p.minX !== undefined) {
+                p.minX = p.originalMinX * scaleX;
+                p.maxX = p.originalMaxX * scaleX;
+            }
+            if (p.minY !== undefined) {
+                p.minY = p.originalMinY * scaleY;
+                p.maxY = p.originalMaxY * scaleY;
+            }
+        });
+        
+        // Escalar enemigos
+        enemies.forEach(e => {
+            if (!e.originalX) {
+                e.originalX = e.x;
+                e.originalY = e.y;
+                e.originalWidth = e.width;
+                e.originalHeight = e.height;
+                e.originalMinX = e.minX;
+                e.originalMaxX = e.maxX;
+            }
+            e.x = e.originalX * scaleX;
+            e.y = e.originalY * scaleY;
+            e.width = e.originalWidth * scaleX;
+            e.height = e.originalHeight * scaleY;
+            e.minX = e.originalMinX * scaleX;
+            e.maxX = e.originalMaxX * scaleX;
+        });
+        
+        // Escalar trampas
+        traps.forEach(t => {
+            if (!t.originalX) {
+                t.originalX = t.x;
+                t.originalY = t.y;
+                t.originalWidth = t.width;
+                t.originalHeight = t.height;
+            }
+            t.x = t.originalX * scaleX;
+            t.y = t.originalY * scaleY;
+            t.width = t.originalWidth * scaleX;
+            t.height = t.originalHeight * scaleY;
+        });
+        
+        // Escalar corazones
+        hearts.forEach(h => {
+            if (!h.originalX) {
+                h.originalX = h.x;
+                h.originalY = h.y;
+                h.originalWidth = h.width;
+                h.originalHeight = h.height;
+            }
+            h.x = h.originalX * scaleX;
+            h.y = h.originalY * scaleY;
+            h.width = h.originalWidth * scaleX;
+            h.height = h.originalHeight * scaleY;
+        });
+        
+        // Escalar estrellas
+        stars.forEach(s => {
+            if (!s.originalX) {
+                s.originalX = s.x;
+                s.originalY = s.y;
+                s.originalWidth = s.width;
+                s.originalHeight = s.height;
+            }
+            s.x = s.originalX * scaleX;
+            s.y = s.originalY * scaleY;
+            s.width = s.originalWidth * scaleX;
+            s.height = s.originalHeight * scaleY;
+        });
+        
+        // Escalar power-ups
+        powerUpItems.forEach(p => {
+            if (!p.originalX) {
+                p.originalX = p.x;
+                p.originalY = p.y;
+                p.originalWidth = p.width;
+                p.originalHeight = p.height;
+            }
+            p.x = p.originalX * scaleX;
+            p.y = p.originalY * scaleY;
+            p.width = p.originalWidth * scaleX;
+            p.height = p.originalHeight * scaleY;
+        });
+    }
+    
+    // Cargar nivel
+    function loadLevel(levelNum) {
+        const level = levels[levelNum - 1];
+        if (!level) {
+            // Victoria final
+            gameRunning = false;
+            setTimeout(() => {
+                alert('🎉 ¡FELICIDADES! 🎉\n\n¡Has completado todos los niveles!\nSabia q lo lograrías\n\nPuntuación final: ' + score + '\n\n💖 Eres increíble, mi amor 💖\nPideme que quieres como premio');
+                resetGame();
+            }, 100);
+            return;
+        }
+        
+        currentLevel = levelNum;
+        player.gravity = level.gravity;
+        
+        // Actualizar UI
+        document.getElementById('star6LevelNum').textContent = levelNum;
+        
+        // Limpiar arrays
+        platforms = [];
+        movingPlatforms = [];
+        enemies = [];
+        hearts = [];
+        stars = [];
+        traps = [];
+        powerUpItems = [];
+        particles = [];
+        
+        // Cargar datos del nivel
+        level.platforms.forEach(p => platforms.push({...p, collected: false}));
+        if (level.movingPlatforms) {
+            level.movingPlatforms.forEach(p => movingPlatforms.push({...p}));
+        }
+        level.enemies.forEach(e => enemies.push({...e}));
+        level.traps.forEach(t => traps.push({...t}));
+        level.hearts.forEach(h => hearts.push({...h, collected: false}));
+        level.stars.forEach(s => stars.push({...s, collected: false}));
+        if (level.powerups) {
+            level.powerups.forEach(p => powerUpItems.push({...p, collected: false}));
+        }
+        
+        console.log(`Nivel ${levelNum} cargado - Estrellas: ${stars.length}, Corazones: ${hearts.length}, Enemigos: ${enemies.length}`);
+        
+        // Reset jugador
+        player.x = 50;
+        player.y = canvas.height - 200;
+        player.vx = 0;
+        player.vy = 0;
+        player.onGround = false;
+        player.jumpsLeft = 1;
+        
+        scaleLevel();
+        updateStarsCounter();
+    }
+    
+    // Configurar controles
+    function setupControls() {
+        const btnLeft = document.getElementById('star6BtnLeft');
+        const btnRight = document.getElementById('star6BtnRight');
+        const btnJump = document.getElementById('star6BtnJump');
+        
+        if (!btnLeft || !btnRight || !btnJump) return;
+        
+        btnLeft.addEventListener('touchstart', (e) => { e.preventDefault(); keys.left = true; });
+        btnLeft.addEventListener('touchend', (e) => { e.preventDefault(); keys.left = false; });
+        btnRight.addEventListener('touchstart', (e) => { e.preventDefault(); keys.right = true; });
+        btnRight.addEventListener('touchend', (e) => { e.preventDefault(); keys.right = false; });
+        btnJump.addEventListener('touchstart', (e) => { e.preventDefault(); jump(); });
+        
+        btnLeft.addEventListener('mousedown', () => keys.left = true);
+        btnLeft.addEventListener('mouseup', () => keys.left = false);
+        btnRight.addEventListener('mousedown', () => keys.right = true);
+        btnRight.addEventListener('mouseup', () => keys.right = false);
+        btnJump.addEventListener('mousedown', jump);
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' || e.key === 'a') keys.left = true;
+            if (e.key === 'ArrowRight' || e.key === 'd') keys.right = true;
+            if (e.key === 'ArrowUp' || e.key === ' ' || e.key === 'w') jump();
+        });
+        
+        document.addEventListener('keyup', (e) => {
+            if (e.key === 'ArrowLeft' || e.key === 'a') keys.left = false;
+            if (e.key === 'ArrowRight' || e.key === 'd') keys.right = false;
+        });
+    }
+    
+    // Salto
+    function jump() {
+        if (!gameRunning) return;
+        
+        if (player.onGround) {
+            player.vy = -player.jumpPower;
+            player.onGround = false;
+            player.jumpsLeft = powerups.doubleJump ? 1 : 0;
+        } else if (player.jumpsLeft > 0 && powerups.doubleJump) {
+            player.vy = -player.jumpPower;
+            player.jumpsLeft--;
+            createParticles(player.x + player.width / 2, player.y + player.height, '#ffd700', 8);
+        }
+    }
+    
+    // Crear partículas
+    function createParticles(x, y, color, count = 12) {
+        for (let i = 0; i < count; i++) {
+            particles.push({
+                x: x,
+                y: y,
+                vx: (Math.random() - 0.5) * 8,
+                vy: (Math.random() - 0.5) * 8 - 2,
+                size: Math.random() * 5 + 2,
+                life: 40,
+                maxLife: 40,
+                color: color
+            });
+        }
+    }
+    
+    // Mostrar mensaje
+    function showLoveMessage() {
+        const overlay = document.getElementById('star6MessageOverlay');
+        const textEl = document.getElementById('star6MessageText');
+        
+        if (!overlay || !textEl) return;
+        
+        const randomMsg = loveMessages[Math.floor(Math.random() * loveMessages.length)];
+        textEl.textContent = randomMsg;
+        overlay.classList.add('active');
+        gameRunning = false;
+    }
+    
+    // Cerrar mensaje
+    function closeLoveMessage() {
+        const overlay = document.getElementById('star6MessageOverlay');
+        if (overlay) overlay.classList.remove('active');
+        gameRunning = true;
+    }
+    
+    // Mostrar nivel completado
+    function showLevelComplete() {
+        const overlay = document.getElementById('star6LevelComplete');
+        const textEl = document.getElementById('star6LevelCompleteText');
+        
+        if (!overlay || !textEl) return;
+        
+        const level = levels[currentLevel - 1];
+        textEl.textContent = `¡Has superado "${level.name}"!\n\n⭐ Puntos obtenidos: ${score}\n\n¡Sigue adelante, mi amor! 💖`;
+        overlay.classList.add('active');
+        gameRunning = false;
+    }
+    
+    // Siguiente nivel
+    function nextLevel() {
+        const overlay = document.getElementById('star6LevelComplete');
+        if (overlay) overlay.classList.remove('active');
+        
+        loadLevel(currentLevel + 1);
+        gameRunning = true;
+    }
+    
+    // Actualizar contador de estrellas
+    function updateStarsCounter() {
+        const counterEl = document.getElementById('star6StarsCount');
+        if (!counterEl) return;
+        
+        const totalStars = stars.length;
+        const collectedStars = stars.filter(s => s.collected).length;
+        counterEl.textContent = `${collectedStars}/${totalStars}`;
+    }
+    
+    // Actualizar puntuación
+    function updateScore(points) {
+        score += points;
+        const scoreEl = document.getElementById('star6Score');
+        if (scoreEl) scoreEl.textContent = score;
+    }
+    
+    // Actualizar vida
+    function updateHealth() {
+        const healthEl = document.getElementById('star6Health');
+        if (!healthEl) return;
+        
+        healthEl.innerHTML = '';
+        for (let i = 0; i < health; i++) {
+            const heart = document.createElement('span');
+            heart.className = 'star6-heart';
+            heart.textContent = '💖';
+            healthEl.appendChild(heart);
+        }
+    }
+    
+    // Activar power-up
+    function activatePowerup(type) {
+        const indicator = document.getElementById('star6PowerupIndicator');
+        
+        if (type === 'invincible') {
+            powerups.invincible = true;
+            powerups.invincibleTimer = 300;
+            player.invincible = true;
+            if (indicator) {
+                indicator.textContent = '⭐ Invencible ⭐';
+                indicator.style.display = 'block';
+            }
+        } else if (type === 'doubleJump') {
+            powerups.doubleJump = true;
+            powerups.doubleJumpTimer = 400;
+            if (indicator) {
+                indicator.textContent = '🦋 Doble Salto 🦋';
+                indicator.style.display = 'block';
+            }
+        } else if (type === 'speed') {
+            powerups.speedBoost = true;
+            powerups.speedBoostTimer = 350;
+            player.speed = 8;
+            if (indicator) {
+                indicator.textContent = '⚡ Super Velocidad ⚡';
+                indicator.style.display = 'block';
+            }
+        }
+    }
+    
+    // Daño al jugador
+    function damagePlayer() {
+        if (player.invincible) return;
+        
+        health--;
+        updateHealth();
+        createParticles(player.x + player.width / 2, player.y + player.height / 2, '#ff6b9d', 20);
+        
+        player.x = 50;
+        player.y = canvas.height - 200;
+        player.vx = 0;
+        player.vy = 0;
+        
+        if (health <= 0) {
+            gameOver();
+        }
+    }
+    
+    // Game Over
+    function gameOver() {
+        gameRunning = false;
+        setTimeout(() => {
+            alert(`💔 Game Over 💔\n\nPuntuación: ${score}\nNivel alcanzado: ${currentLevel}\n\n¡Inténtalo de nuevo!`);
+            resetGame();
+        }, 100);
+    }
+    
+    // Reset
+    function resetGame() {
+        score = 0;
+        health = 3;
+        currentLevel = 1;
+        powerups = {
+            invincible: false,
+            doubleJump: false,
+            speedBoost: false,
+            invincibleTimer: 0,
+            doubleJumpTimer: 0,
+            speedBoostTimer: 0
+        };
+        player.speed = 5;
+        player.invincible = false;
+        
+        updateScore(0);
+        updateHealth();
+        loadLevel(1);
+        gameRunning = true;
+    }
+    
+    // Actualizar física
+    function update() {
+        if (!gameRunning) return;
+        
+        // Movimiento
+        let currentSpeed = player.speed;
+        if (keys.left) player.vx = -currentSpeed;
+        else if (keys.right) player.vx = currentSpeed;
+        else player.vx = 0;
+        
+        // Gravedad
+        player.vy += player.gravity;
+        
+        // Aplicar velocidad
+        player.x += player.vx;
+        player.y += player.vy;
+        
+        // Límites
+        if (player.x < 0) player.x = 0;
+        if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
+        
+        // Colisiones con plataformas
+        player.onGround = false;
+        const allPlatforms = [...platforms, ...movingPlatforms];
+        
+        allPlatforms.forEach(plat => {
+            if (player.x + player.width > plat.x &&
+                player.x < plat.x + plat.width &&
+                player.y + player.height > plat.y &&
+                player.y + player.height < plat.y + plat.height + 10 &&
+                player.vy > 0) {
+                
+                player.y = plat.y - player.height;
+                player.vy = 0;
+                player.onGround = true;
+                player.jumpsLeft = powerups.doubleJump ? 1 : 0;
+                
+                // Si es plataforma móvil, mover al jugador con ella
+                if (plat.speed) {
+                    if (plat.vertical) {
+                        player.y += plat.speed * plat.dir;
+                    } else {
+                        player.x += plat.speed * plat.dir;
+                    }
+                }
+            }
+        });
+        
+        // Mover plataformas móviles
+        movingPlatforms.forEach(plat => {
+            if (plat.vertical) {
+                plat.y += plat.speed * plat.dir;
+                if (plat.y <= plat.minY || plat.y >= plat.maxY) {
+                    plat.dir *= -1;
+                }
+            } else {
+                plat.x += plat.speed * plat.dir;
+                if (plat.x <= plat.minX || plat.x >= plat.maxX) {
+                    plat.dir *= -1;
+                }
+            }
+        });
+        
+        // Mover enemigos
+        enemies.forEach(enemy => {
+            enemy.x += enemy.speed * enemy.dir;
+            if (enemy.x <= enemy.minX || enemy.x + enemy.width >= enemy.maxX) {
+                enemy.dir *= -1;
+            }
+            
+            // Colisión con jugador
+            if (player.x + player.width > enemy.x &&
+                player.x < enemy.x + enemy.width &&
+                player.y + player.height > enemy.y &&
+                player.y < enemy.y + enemy.height) {
+                damagePlayer();
+            }
+        });
+        
+        // Colisión con trampas
+        traps.forEach(trap => {
+            if (player.x + player.width > trap.x &&
+                player.x < trap.x + trap.width &&
+                player.y + player.height > trap.y &&
+                player.y < trap.y + trap.height) {
+                damagePlayer();
+            }
+        });
+        
+        // Colectar corazones
+        hearts.forEach(heart => {
+            if (!heart.collected &&
+                player.x + player.width > heart.x &&
+                player.x < heart.x + heart.width &&
+                player.y + player.height > heart.y &&
+                player.y < heart.y + heart.height) {
+                
+                heart.collected = true;
+                createParticles(heart.x + heart.width / 2, heart.y + heart.height / 2, '#ff69b4', 15);
+                updateScore(100);
+                showLoveMessage();
+            }
+        });
+        
+        // Colectar estrellas
+        stars.forEach(star => {
+            if (!star.collected &&
+                player.x + player.width > star.x &&
+                player.x < star.x + star.width &&
+                player.y + player.height > star.y &&
+                player.y < star.y + star.height) {
+                
+                star.collected = true;
+                createParticles(star.x + star.width / 2, star.y + star.height / 2, '#ffd700', 10);
+                updateScore(50);
+                updateStarsCounter();
+            }
+        });
+        
+        // Colectar power-ups
+        powerUpItems.forEach(item => {
+            if (!item.collected &&
+                player.x + player.width > item.x &&
+                player.x < item.x + item.width &&
+                player.y + player.height > item.y &&
+                player.y < item.y + item.height) {
+                
+                item.collected = true;
+                createParticles(item.x + item.width / 2, item.y + item.height / 2, '#00ff00', 12);
+                activatePowerup(item.type);
+                updateScore(75);
+            }
+        });
+        
+        // Actualizar timers de power-ups
+        const indicator = document.getElementById('star6PowerupIndicator');
+        
+        if (powerups.invincibleTimer > 0) {
+            powerups.invincibleTimer--;
+            if (powerups.invincibleTimer === 0) {
+                powerups.invincible = false;
+                player.invincible = false;
+                if (indicator) indicator.style.display = 'none';
+            }
+        }
+        
+        if (powerups.doubleJumpTimer > 0) {
+            powerups.doubleJumpTimer--;
+            if (powerups.doubleJumpTimer === 0) {
+                powerups.doubleJump = false;
+                if (!powerups.invincibleTimer && !powerups.speedBoostTimer) {
+                    if (indicator) indicator.style.display = 'none';
+                }
+            }
+        }
+        
+        if (powerups.speedBoostTimer > 0) {
+            powerups.speedBoostTimer--;
+            if (powerups.speedBoostTimer === 0) {
+                powerups.speedBoost = false;
+                player.speed = 5;
+                if (!powerups.invincibleTimer && !powerups.doubleJumpTimer) {
+                    if (indicator) indicator.style.display = 'none';
+                }
+            }
+        }
+        
+        // Actualizar partículas
+        particles = particles.filter(p => {
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += 0.3;
+            p.life--;
+            return p.life > 0;
+        });
+        
+        // Caída al vacío
+        if (player.y > canvas.height + 100) {
+            damagePlayer();
+        }
+        
+        // Verificar nivel completado
+        if (stars.length > 0) {
+            const allStarsCollected = stars.every(s => s.collected);
+            const totalStars = stars.length;
+            const collectedStars = stars.filter(s => s.collected).length;
+            
+            if (collectedStars > 0 && collectedStars % 1 === 0) {
+                console.log(`⭐ Progreso: ${collectedStars}/${totalStars} estrellas`);
+            }
+            
+            if (allStarsCollected) {
+                console.log('🎉 ¡Nivel completado! Todas las estrellas recolectadas');
+                stars.length = 0;
+                showLevelComplete();
+            }
+        }
+        
+        // Flash de invencibilidad
+        if (player.invincible) {
+            player.invincibleFlash = (player.invincibleFlash + 0.3) % (Math.PI * 2);
+        }
+    }
+    
+    // Dibujar
+    function draw() {
+        // Cielo
+        const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        gradient.addColorStop(0, '#87ceeb');
+        gradient.addColorStop(1, '#b0e0e6');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Nubes
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+        drawCloud(canvas.width * 0.15, 60, 40);
+        drawCloud(canvas.width * 0.65, 90, 50);
+        drawCloud(canvas.width * 0.85, 70, 35);
+        
+        // Plataformas
+        platforms.forEach((plat, i) => {
+            ctx.fillStyle = '#8b4513';
+            ctx.fillRect(plat.x, plat.y, plat.width, plat.height);
+            
+            if (plat.type !== 'ground') {
+                ctx.fillStyle = '#228b22';
+                ctx.fillRect(plat.x, plat.y - 5, plat.width, 5);
+            }
+        });
+        
+        // Plataformas móviles
+        movingPlatforms.forEach(plat => {
+            ctx.fillStyle = '#cd853f';
+            ctx.fillRect(plat.x, plat.y, plat.width, plat.height);
+            ctx.fillStyle = '#32cd32';
+            ctx.fillRect(plat.x, plat.y - 5, plat.width, 5);
+            
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            ctx.strokeRect(plat.x + 2, plat.y + 2, plat.width - 4, plat.height - 4);
+            ctx.setLineDash([]);
+        });
+        
+        // Trampas
+        traps.forEach(trap => {
+            if (trap.type === 'spikes') {
+                ctx.fillStyle = '#696969';
+                const spikeCount = Math.floor(trap.width / 15);
+                for (let i = 0; i < spikeCount; i++) {
+                    const x = trap.x + i * (trap.width / spikeCount);
+                    ctx.beginPath();
+                    ctx.moveTo(x, trap.y + trap.height);
+                    ctx.lineTo(x + (trap.width / spikeCount) / 2, trap.y);
+                    ctx.lineTo(x + (trap.width / spikeCount), trap.y + trap.height);
+                    ctx.fill();
+                }
+            } else if (trap.type === 'fire') {
+                const time = Date.now() * 0.01;
+                ctx.fillStyle = '#ff4500';
+                ctx.fillRect(trap.x, trap.y, trap.width, trap.height);
+                ctx.fillStyle = '#ffa500';
+                ctx.fillRect(trap.x + 5, trap.y + 5, trap.width - 10, trap.height - 10);
+                ctx.fillStyle = '#ffff00';
+                const offset = Math.sin(time) * 3;
+                ctx.fillRect(trap.x + 8, trap.y + 8 + offset, trap.width - 16, trap.height - 16);
+            }
+        });
+        
+        // Enemigos
+        enemies.forEach(enemy => {
+            ctx.fillStyle = '#9370db';
+            ctx.beginPath();
+            ctx.arc(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2, enemy.width / 2, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#fff';
+            const eyeOffset = enemy.dir > 0 ? 3 : -3;
+            ctx.beginPath();
+            ctx.arc(enemy.x + enemy.width / 2 - 6 + eyeOffset, enemy.y + 10, 3, 0, Math.PI * 2);
+            ctx.arc(enemy.x + enemy.width / 2 + 6 + eyeOffset, enemy.y + 10, 3, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#000';
+            ctx.beginPath();
+            ctx.arc(enemy.x + enemy.width / 2 - 6 + eyeOffset, enemy.y + 10, 1.5, 0, Math.PI * 2);
+            ctx.arc(enemy.x + enemy.width / 2 + 6 + eyeOffset, enemy.y + 10, 1.5, 0, Math.PI * 2);
+            ctx.fill();
+        });
+        
+        // Corazones
+        ctx.font = '24px Arial';
+        hearts.forEach(heart => {
+            if (!heart.collected) {
+                ctx.fillText('💖', heart.x, heart.y + heart.height);
+            }
+        });
+        
+        // Estrellas
+        ctx.font = '18px Arial';
+        stars.forEach(star => {
+            if (!star.collected) {
+                ctx.fillText('⭐', star.x, star.y + star.height);
+            }
+        });
+        
+        // Power-ups
+        ctx.font = '20px Arial';
+        powerUpItems.forEach(item => {
+            if (!item.collected) {
+                let emoji = '⚡';
+                if (item.type === 'invincible') emoji = '🛡️';
+                else if (item.type === 'doubleJump') emoji = '🦋';
+                else if (item.type === 'speed') emoji = '⚡';
+                
+                ctx.fillText(emoji, item.x, item.y + item.height);
+            }
+        });
+        
+        // Jugador
+        if (player.invincible) {
+            const alpha = Math.abs(Math.sin(player.invincibleFlash));
+            ctx.globalAlpha = 0.3 + alpha * 0.7;
+            
+            ctx.fillStyle = '#ffd700';
+            ctx.beginPath();
+            ctx.arc(player.x + player.width / 2, player.y + player.height / 2, player.width / 2 + 5, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        ctx.fillStyle = player.color;
+        ctx.fillRect(player.x, player.y, player.width, player.height);
+        
+        // Cara
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(player.x + 8, player.y + 8, 6, 6);
+        ctx.fillRect(player.x + 18, player.y + 8, 6, 6);
+        
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(player.x + 16, player.y + 20, 7, 0.2, Math.PI - 0.2);
+        ctx.stroke();
+        
+        ctx.globalAlpha = 1;
+        
+        // Partículas
+        particles.forEach(p => {
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = p.life / p.maxLife;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fill();
+        });
+        ctx.globalAlpha = 1;
+    }
+    
+    // Dibujar nube
+    function drawCloud(x, y, size) {
+        ctx.beginPath();
+        ctx.arc(x, y, size * 0.6, 0, Math.PI * 2);
+        ctx.arc(x + size * 0.6, y, size * 0.8, 0, Math.PI * 2);
+        ctx.arc(x + size * 1.2, y, size * 0.6, 0, Math.PI * 2);
+        ctx.fill();
+    }
+    
+    // Loop principal
+    function gameLoop() {
+        update();
+        draw();
+        animationId = requestAnimationFrame(gameLoop);
+    }
+    
+    // Iniciar
+    function start() {
+        if (!initCanvas()) return;
+        setupControls();
+        loadLevel(1);
+        updateHealth();
+        updateScore(0);
+        gameRunning = true;
+        gameLoop();
+    }
+    
+    // Detener
+    function stop() {
+        gameRunning = false;
+        if (animationId) {
+            cancelAnimationFrame(animationId);
+            animationId = null;
+        }
+    }
+    
+    // API pública
+    return {
+        start: start,
+        stop: stop,
+        closeLoveMessage: closeLoveMessage,
+        nextLevel: nextLevel
+    };
+})();
+
+// Auto-iniciar
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(() => {
+        star6Game.start();
+    }, 100);
+});
+
+function goBackSafe() {
+  if (document.referrer) {
+    history.back();
+  } else {
+    window.location.href = "index.html"; // o la página principal
+  }
+}
+</script>
