@@ -1,22 +1,20 @@
 <!-- ============================================ -->
-<!-- JUEGO MEJORADO PARA #starPage6 - OPTIMIZADO PARA MÓVIL -->
+<!-- JUEGO MEJORADO PARA #starPage6 - PANTALLA COMPLETA HORIZONTAL -->
 <!-- ============================================ -->
 <div id="starPage6" class="page star-page">
-    <!-- Overlay de orientación -->
-    <div class="star6-orientation-overlay" id="star6OrientationOverlay">
+    <!-- Overlay de orientación - SIEMPRE VISIBLE AL INICIO -->
+    <div class="star6-orientation-overlay active" id="star6OrientationOverlay">
         <div class="star6-orientation-card">
             <div class="star6-phone-icon">📱</div>
             <h2>¡Gira tu dispositivo!</h2>
-            <p>Para una mejor experiencia, por favor gira tu teléfono a modo horizontal (landscape)</p>
+            <p>Este juego está diseñado para jugarse en modo horizontal (landscape)</p>
             <div class="star6-rotation-arrow">🔄</div>
-            <button class="star6-play-anyway-btn" onclick="star6Game.dismissOrientationWarning()">
-                Jugar de todos modos
-            </button>
+            <p class="star6-orientation-tip">Gira tu teléfono para empezar</p>
         </div>
     </div>
     
     <div class="star6-game-wrapper">
-        <!-- Header del juego - Compacto para móvil -->
+        <!-- Header del juego - Compacto -->
         <div class="star6-header">
             <button class="star6-back-btn" onclick="goBackSafe()">←</button>
             
@@ -91,18 +89,19 @@
 </div>
 
 <!-- ============================================ -->
-<!-- ESTILOS MEJORADOS PARA MÓVIL -->
+<!-- ESTILOS OPTIMIZADOS PARA PANTALLA COMPLETA HORIZONTAL -->
 <!-- ============================================ -->
 <style>
-/* Estilos exclusivos para Star Page 6 - Juego Optimizado para Móvil */
+/* Estilos exclusivos para Star Page 6 - Pantalla Completa */
 #starPage6 {
     background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 100vw;
     height: 100vh;
     overflow: hidden;
+    z-index: 9999;
 }
 
 #starPage6 .star6-game-wrapper {
@@ -114,18 +113,18 @@
     overflow: hidden;
 }
 
-/* Overlay de orientación */
+/* Overlay de orientación - MEJORADO */
 #starPage6 .star6-orientation-overlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.95);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     display: none;
     align-items: center;
     justify-content: center;
-    z-index: 10000;
+    z-index: 99999;
     animation: star6-fadeIn 0.3s ease;
 }
 
@@ -135,67 +134,62 @@
 
 #starPage6 .star6-orientation-card {
     background: linear-gradient(135deg, #fff5f7 0%, #ffe8ec 100%);
-    border-radius: 25px;
-    padding: 40px 30px;
+    border-radius: 30px;
+    padding: 50px 40px;
     max-width: 85%;
     text-align: center;
-    box-shadow: 0 20px 60px rgba(255, 107, 157, 0.6);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
     animation: star6-scaleIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 #starPage6 .star6-phone-icon {
-    font-size: 80px;
-    margin-bottom: 20px;
+    font-size: 100px;
+    margin-bottom: 25px;
     animation: star6-rotate 2s ease-in-out infinite;
+    display: block;
 }
 
 #starPage6 .star6-orientation-card h2 {
     color: #ff6b9d;
-    font-size: 24px;
-    margin-bottom: 15px;
+    font-size: 28px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(255, 107, 157, 0.3);
 }
 
 #starPage6 .star6-orientation-card p {
     color: #555;
-    font-size: 16px;
+    font-size: 18px;
     line-height: 1.6;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+}
+
+#starPage6 .star6-orientation-tip {
+    color: #ff6b9d;
+    font-weight: bold;
+    font-size: 20px;
+    margin-top: 15px;
 }
 
 #starPage6 .star6-rotation-arrow {
-    font-size: 50px;
-    margin: 20px 0;
+    font-size: 70px;
+    margin: 30px 0;
     animation: star6-spin 2s linear infinite;
+    display: block;
 }
 
-#starPage6 .star6-play-anyway-btn {
-    padding: 12px 24px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    border-radius: 25px;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-    transition: all 0.3s;
-}
-
-#starPage6 .star6-play-anyway-btn:active {
-    transform: scale(0.95);
-}
-
-/* Header compacto */
+/* Header compacto para pantalla completa */
 #starPage6 .star6-header {
     position: relative;
     display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: center;
-    padding: 8px 10px;
-    background: rgba(255, 255, 255, 0.95);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 8px 15px;
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15);
     z-index: 100;
-    gap: 10px;
+    gap: 12px;
+    min-height: 55px;
 }
 
 #starPage6 .star6-stats-left,
@@ -208,7 +202,7 @@
 
 #starPage6 .star6-stats-center {
     justify-content: center;
-    gap: 12px;
+    gap: 10px;
 }
 
 #starPage6 .star6-stats-right {
@@ -217,24 +211,25 @@
 
 #starPage6 .star6-health {
     display: flex;
-    gap: 4px;
+    gap: 5px;
 }
 
 #starPage6 .star6-heart {
-    font-size: 20px;
-    filter: drop-shadow(1px 1px 2px rgba(255, 107, 157, 0.4));
+    font-size: 22px;
+    filter: drop-shadow(2px 2px 3px rgba(255, 107, 157, 0.4));
+    animation: star6-heartbeat 1.5s ease-in-out infinite;
 }
 
 #starPage6 .star6-score,
 #starPage6 .star6-level,
 #starPage6 .star6-stars-counter {
     background: linear-gradient(135deg, #ff6b9d 0%, #ff8fab 100%);
-    padding: 4px 10px;
-    border-radius: 15px;
+    padding: 5px 12px;
+    border-radius: 18px;
     font-weight: bold;
-    font-size: 13px;
+    font-size: 14px;
     color: white;
-    box-shadow: 0 2px 8px rgba(255, 107, 157, 0.3);
+    box-shadow: 0 3px 10px rgba(255, 107, 157, 0.35);
     white-space: nowrap;
 }
 
@@ -251,11 +246,11 @@
 #starPage6 .star6-pause-btn {
     background: rgba(255, 107, 157, 0.2);
     border: 2px solid #ff6b9d;
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 20px;
     color: #ff6b9d;
     cursor: pointer;
     transition: all 0.2s;
@@ -267,63 +262,67 @@
 #starPage6 .star6-back-btn:active,
 #starPage6 .star6-pause-btn:active {
     transform: scale(0.9);
-    background: rgba(255, 107, 157, 0.3);
+    background: rgba(255, 107, 157, 0.35);
 }
 
-/* Canvas container */
+/* Canvas container - PANTALLA COMPLETA */
 #starPage6 .star6-canvas-container {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 5px;
+    padding: 8px;
     overflow: hidden;
+    background: rgba(0, 0, 0, 0.05);
 }
 
 #starPage6 #star6Canvas {
     max-width: 100%;
     max-height: 100%;
-    border: 3px solid #fff;
-    border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    border: 4px solid #fff;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
     background: #87ceeb;
     image-rendering: crisp-edges;
     display: block;
 }
 
-/* Controles optimizados */
+/* Controles optimizados para pantalla completa */
 #starPage6 .star6-controls {
     position: relative;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 15px;
-    padding: 10px 15px;
-    background: rgba(255, 255, 255, 0.95);
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 -3px 15px rgba(0, 0, 0, 0.15);
     z-index: 100;
+    min-height: 95px;
 }
 
 #starPage6 .star6-controls-left {
     display: flex;
-    gap: 10px;
+    gap: 12px;
     justify-content: flex-start;
+    align-items: center;
 }
 
 #starPage6 .star6-controls-right {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
 }
 
 #starPage6 .star6-btn {
-    width: 65px;
-    height: 65px;
+    width: 68px;
+    height: 68px;
     border-radius: 50%;
     border: none;
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.98);
     color: #ff6b9d;
-    font-size: 28px;
+    font-size: 30px;
     font-weight: bold;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
     cursor: pointer;
     transition: all 0.1s;
     user-select: none;
@@ -331,20 +330,22 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    border: 3px solid rgba(255, 107, 157, 0.3);
 }
 
 #starPage6 .star6-btn:active {
     transform: scale(0.88);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
 }
 
 #starPage6 .star6-btn-jump {
     background: linear-gradient(135deg, #ff6b9d 0%, #ff8fab 100%);
     color: white;
-    width: 75px;
-    height: 75px;
-    font-size: 24px;
-    box-shadow: 0 6px 20px rgba(255, 107, 157, 0.5);
+    width: 78px;
+    height: 78px;
+    font-size: 26px;
+    box-shadow: 0 8px 25px rgba(255, 107, 157, 0.6);
+    border: 3px solid rgba(255, 255, 255, 0.5);
 }
 
 /* Mensaje romántico y overlays */
@@ -354,7 +355,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.85);
+    background: rgba(0, 0, 0, 0.90);
     display: none;
     align-items: center;
     justify-content: center;
@@ -369,51 +370,51 @@
 
 #starPage6 .star6-message-card {
     background: linear-gradient(135deg, #fff5f7 0%, #ffe8ec 100%);
-    border-radius: 20px;
-    padding: 25px;
-    max-width: 90%;
+    border-radius: 25px;
+    padding: 30px 25px;
+    max-width: 500px;
     max-height: 80%;
     overflow-y: auto;
-    box-shadow: 0 20px 60px rgba(255, 107, 157, 0.6);
+    box-shadow: 0 25px 70px rgba(255, 107, 157, 0.7);
     animation: star6-scaleIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 #starPage6 .star6-message-card h2 {
     color: #ff6b9d;
     text-align: center;
-    margin-bottom: 15px;
-    font-size: 22px;
+    margin-bottom: 20px;
+    font-size: 24px;
     text-shadow: 2px 2px 4px rgba(255, 107, 157, 0.2);
 }
 
 #starPage6 .star6-message-card p {
     color: #555;
     line-height: 1.7;
-    font-size: 15px;
+    font-size: 16px;
     text-align: center;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
 }
 
 #starPage6 .star6-message-btn {
-    padding: 12px 28px;
+    padding: 14px 30px;
     background: linear-gradient(135deg, #ff6b9d 0%, #ff8fab 100%);
     color: white;
     border: none;
-    border-radius: 25px;
-    font-size: 16px;
+    border-radius: 28px;
+    font-size: 17px;
     font-weight: bold;
     cursor: pointer;
     display: block;
-    margin: 10px auto 0;
-    box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
+    margin: 12px auto 0;
+    box-shadow: 0 5px 18px rgba(255, 107, 157, 0.5);
     transition: all 0.3s;
     width: 90%;
-    max-width: 250px;
+    max-width: 280px;
 }
 
 #starPage6 .star6-message-btn:active {
     transform: translateY(2px);
-    box-shadow: 0 2px 8px rgba(255, 107, 157, 0.4);
+    box-shadow: 0 3px 10px rgba(255, 107, 157, 0.5);
 }
 
 #starPage6 .star6-secondary-btn {
@@ -423,22 +424,27 @@
 /* Indicador de power-up */
 #starPage6 .star6-powerup-indicator {
     position: absolute;
-    top: 70px;
+    top: 65px;
     left: 50%;
     transform: translateX(-50%);
     background: rgba(255, 215, 0, 0.95);
-    padding: 8px 16px;
-    border-radius: 20px;
+    padding: 10px 20px;
+    border-radius: 25px;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 15px;
     color: #8b4513;
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5);
+    box-shadow: 0 5px 20px rgba(255, 215, 0, 0.6);
     display: none;
     animation: star6-bounce 0.6s ease-in-out infinite;
     z-index: 99;
 }
 
 /* Animaciones */
+@keyframes star6-heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+}
+
 @keyframes star6-fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -457,13 +463,13 @@
 
 @keyframes star6-bounce {
     0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(-8px); }
+    50% { transform: translateX(-50%) translateY(-10px); }
 }
 
 @keyframes star6-rotate {
     0%, 100% { transform: rotate(0deg); }
-    25% { transform: rotate(-15deg); }
-    75% { transform: rotate(15deg); }
+    25% { transform: rotate(-20deg); }
+    75% { transform: rotate(20deg); }
 }
 
 @keyframes star6-spin {
@@ -471,78 +477,34 @@
     to { transform: rotate(360deg); }
 }
 
-/* Landscape (modo horizontal - ideal para jugar) */
+/* Landscape (modo horizontal - ÓPTIMO) */
 @media (orientation: landscape) {
     #starPage6 .star6-header {
-        padding: 6px 12px;
+        padding: 6px 15px;
+        min-height: 50px;
     }
     
     #starPage6 .star6-controls {
-        padding: 8px 20px;
+        padding: 10px 25px;
+        min-height: 90px;
     }
     
     #starPage6 .star6-btn {
-        width: 58px;
-        height: 58px;
+        width: 65px;
+        height: 65px;
     }
     
     #starPage6 .star6-btn-jump {
-        width: 68px;
-        height: 68px;
+        width: 75px;
+        height: 75px;
     }
 }
 
-/* Portrait (modo vertical - mostrar advertencia en móvil) */
-@media (orientation: portrait) and (max-width: 768px) {
-    #starPage6 .star6-controls {
-        grid-template-columns: 1fr;
-        gap: 10px;
-    }
-    
-    #starPage6 .star6-controls-left,
-    #starPage6 .star6-controls-right {
-        justify-content: center;
-    }
-}
-
-/* Pantallas muy pequeñas */
-@media (max-width: 400px) {
-    #starPage6 .star6-btn {
-        width: 55px;
-        height: 55px;
-        font-size: 24px;
-    }
-    
-    #starPage6 .star6-btn-jump {
-        width: 62px;
-        height: 62px;
-    }
-    
-    #starPage6 .star6-heart {
-        font-size: 18px;
-    }
-    
-    #starPage6 .star6-score,
-    #starPage6 .star6-level,
-    #starPage6 .star6-stars-counter {
-        font-size: 12px;
-        padding: 3px 8px;
-    }
-    
-    #starPage6 .star6-message-card h2 {
-        font-size: 20px;
-    }
-    
-    #starPage6 .star6-message-card p {
-        font-size: 14px;
-    }
-}
-
-/* Tablets y pantallas medianas */
-@media (min-width: 768px) {
+/* Pantallas muy anchas (tablets horizontales, etc) */
+@media (min-width: 768px) and (orientation: landscape) {
     #starPage6 #star6Canvas {
-        border-radius: 16px;
-        border-width: 4px;
+        border-radius: 18px;
+        border-width: 5px;
     }
     
     #starPage6 .star6-btn {
@@ -554,14 +516,54 @@
         width: 80px;
         height: 80px;
     }
+    
+    #starPage6 .star6-controls {
+        padding: 12px 30px;
+    }
+}
+
+/* Ajustes para pantallas muy pequeñas */
+@media (max-height: 500px) and (orientation: landscape) {
+    #starPage6 .star6-header {
+        padding: 5px 12px;
+        min-height: 45px;
+    }
+    
+    #starPage6 .star6-controls {
+        padding: 8px 18px;
+        min-height: 80px;
+    }
+    
+    #starPage6 .star6-btn {
+        width: 58px;
+        height: 58px;
+        font-size: 26px;
+    }
+    
+    #starPage6 .star6-btn-jump {
+        width: 68px;
+        height: 68px;
+        font-size: 24px;
+    }
+    
+    #starPage6 .star6-heart {
+        font-size: 20px;
+    }
+    
+    #starPage6 .star6-score,
+    #starPage6 .star6-level,
+    #starPage6 .star6-stars-counter {
+        font-size: 13px;
+        padding: 4px 10px;
+    }
 }
 </style>
 
 <!-- ============================================ -->
-<!-- JAVASCRIPT MEJORADO -->
+<!-- JAVASCRIPT MEJORADO PARA PANTALLA COMPLETA -->
 <!-- ============================================ -->
 <script>
-// Juego de la Estrella 6 - Versión Optimizada para Móvil
+// Juego de la Estrella 6 - Versión Pantalla Completa Horizontal
 const star6Game = (function() {
     'use strict';
     
@@ -573,7 +575,6 @@ const star6Game = (function() {
     let gameRunning = false;
     let gamePaused = false;
     let animationId = null;
-    let orientationWarningDismissed = false;
     
     // Power-ups
     let powerups = {
@@ -628,7 +629,7 @@ const star6Game = (function() {
     let particles = [];
     let movingPlatforms = [];
     
-    // Niveles mejorados y balanceados para móvil
+    // Niveles optimizados
     const levels = [
         // Nivel 1 - Tutorial suave
         {
@@ -780,7 +781,7 @@ const star6Game = (function() {
             ]
         },
         
-        // Nivel 5 - Final épico pero accesible
+        // Nivel 5 - Final épico
         {
             name: "Castillo del Amor Eterno",
             gravity: 0.6,
@@ -835,30 +836,42 @@ const star6Game = (function() {
         }
     ];
     
-    // Detectar orientación y mostrar advertencia en móvil
+    // Detectar orientación y mostrar/ocultar overlay
     function checkOrientation() {
-        if (window.innerWidth > 768) {
-            // No mostrar advertencia en tablets/desktop
-            return;
-        }
-        
         const overlay = document.getElementById('star6OrientationOverlay');
-        if (!overlay || orientationWarningDismissed) return;
+        if (!overlay) return;
         
-        const isPortrait = window.innerHeight > window.innerWidth;
+        const isLandscape = window.innerWidth > window.innerHeight;
         
-        if (isPortrait) {
-            overlay.classList.add('active');
-        } else {
+        if (isLandscape) {
             overlay.classList.remove('active');
+            if (!gameRunning && canvas) {
+                gameRunning = true;
+            }
+        } else {
+            overlay.classList.add('active');
+            gameRunning = false;
         }
     }
     
-    // Descartar advertencia de orientación
-    function dismissOrientationWarning() {
-        orientationWarningDismissed = true;
-        const overlay = document.getElementById('star6OrientationOverlay');
-        if (overlay) overlay.classList.remove('active');
+    // Forzar pantalla completa
+    function enterFullscreen() {
+        const elem = document.getElementById('starPage6');
+        if (!elem) return;
+        
+        try {
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            } else if (elem.mozRequestFullScreen) {
+                elem.mozRequestFullScreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            }
+        } catch (e) {
+            console.log('No se pudo entrar en pantalla completa:', e);
+        }
     }
     
     // Inicializar canvas
@@ -872,10 +885,9 @@ const star6Game = (function() {
             const container = document.querySelector('.star6-canvas-container');
             if (!container) return;
             
-            const containerWidth = container.clientWidth - 10;
-            const containerHeight = container.clientHeight - 10;
+            const containerWidth = container.clientWidth - 16;
+            const containerHeight = container.clientHeight - 16;
             
-            // Mantener aspect ratio 4:3
             const aspectRatio = 4 / 3;
             let canvasWidth = containerWidth;
             let canvasHeight = canvasWidth / aspectRatio;
@@ -885,7 +897,6 @@ const star6Game = (function() {
                 canvasWidth = canvasHeight * aspectRatio;
             }
             
-            // Escalar para diferentes tamaños de pantalla
             const baseWidth = 800;
             const baseHeight = 600;
             
@@ -914,7 +925,7 @@ const star6Game = (function() {
         return true;
     }
     
-    // Escalar nivel (sin cambios en la lógica)
+    // Escalar nivel
     function scaleLevel() {
         const scaleX = canvas.width / 800;
         const scaleY = canvas.height / 600;
@@ -1656,10 +1667,22 @@ const star6Game = (function() {
         if (!initCanvas()) return;
         setupControls();
         checkOrientation();
+        
+        // Intentar entrar en pantalla completa
+        setTimeout(() => {
+            enterFullscreen();
+        }, 500);
+        
         loadLevel(1);
         updateHealth();
         updateScore(0);
-        gameRunning = true;
+        
+        // Solo empezar si está en landscape
+        const isLandscape = window.innerWidth > window.innerHeight;
+        if (isLandscape) {
+            gameRunning = true;
+        }
+        
         gameLoop();
     }
     
@@ -1676,7 +1699,6 @@ const star6Game = (function() {
         stop: stop,
         closeLoveMessage: closeLoveMessage,
         nextLevel: nextLevel,
-        dismissOrientationWarning: dismissOrientationWarning,
         togglePause: togglePause,
         restart: restart
     };
