@@ -39,12 +39,14 @@
             </div>
         </div>
         
-        <!-- Canvas del juego -->
-        <div class="star6-canvas-container">
+        <!-- Canvas del juego con zona táctil para gestos -->
+        <div class="star6-canvas-container" id="star6CanvasContainer">
             <canvas id="star6Canvas"></canvas>
+            <!-- Overlay invisible para capturar gestos -->
+            <div class="star6-gesture-overlay" id="star6GestureOverlay"></div>
         </div>
         
-        <!-- Controles táctiles optimizados -->
+        <!-- Controles táctiles optimizados - ABAJO PERO VISIBLES -->
         <div class="star6-controls">
             <div class="star6-controls-left">
                 <button class="star6-btn star6-btn-left" id="star6BtnLeft">◄</button>
@@ -87,7 +89,6 @@
         <div class="star6-powerup-indicator" id="star6PowerupIndicator"></div>
     </div>
 </div>
-
 <!-- ============================================ -->
 <!-- ESTILOS OPTIMIZADOS PARA PANTALLA COMPLETA HORIZONTAL -->
 <!-- ============================================ -->
@@ -103,7 +104,6 @@
     overflow: hidden;
     z-index: 9999;
 }
-
 #starPage6 .star6-game-wrapper {
     width: 100%;
     height: 100vh;
@@ -112,7 +112,6 @@
     flex-direction: column;
     overflow: hidden;
 }
-
 /* Overlay de orientación - MEJORADO */
 #starPage6 .star6-orientation-overlay {
     position: fixed;
@@ -127,11 +126,9 @@
     z-index: 99999;
     animation: star6-fadeIn 0.3s ease;
 }
-
 #starPage6 .star6-orientation-overlay.active {
     display: flex;
 }
-
 #starPage6 .star6-orientation-card {
     background: linear-gradient(135deg, #fff5f7 0%, #ffe8ec 100%);
     border-radius: 30px;
@@ -141,14 +138,12 @@
     box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
     animation: star6-scaleIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
-
 #starPage6 .star6-phone-icon {
     font-size: 100px;
     margin-bottom: 25px;
     animation: star6-rotate 2s ease-in-out infinite;
     display: block;
 }
-
 #starPage6 .star6-orientation-card h2 {
     color: #ff6b9d;
     font-size: 28px;
@@ -156,28 +151,24 @@
     font-weight: bold;
     text-shadow: 2px 2px 4px rgba(255, 107, 157, 0.3);
 }
-
 #starPage6 .star6-orientation-card p {
     color: #555;
     font-size: 18px;
     line-height: 1.6;
     margin-bottom: 25px;
 }
-
 #starPage6 .star6-orientation-tip {
     color: #ff6b9d;
     font-weight: bold;
     font-size: 20px;
     margin-top: 15px;
 }
-
 #starPage6 .star6-rotation-arrow {
     font-size: 70px;
     margin: 30px 0;
     animation: star6-spin 2s linear infinite;
     display: block;
 }
-
 /* Header compacto para pantalla completa */
 #starPage6 .star6-header {
     position: relative;
@@ -191,7 +182,6 @@
     gap: 12px;
     min-height: 55px;
 }
-
 #starPage6 .star6-stats-left,
 #starPage6 .star6-stats-center,
 #starPage6 .star6-stats-right {
@@ -199,27 +189,22 @@
     align-items: center;
     gap: 8px;
 }
-
 #starPage6 .star6-stats-center {
     justify-content: center;
     gap: 10px;
 }
-
 #starPage6 .star6-stats-right {
     justify-content: flex-end;
 }
-
 #starPage6 .star6-health {
     display: flex;
     gap: 5px;
 }
-
 #starPage6 .star6-heart {
     font-size: 22px;
     filter: drop-shadow(2px 2px 3px rgba(255, 107, 157, 0.4));
     animation: star6-heartbeat 1.5s ease-in-out infinite;
 }
-
 #starPage6 .star6-score,
 #starPage6 .star6-level,
 #starPage6 .star6-stars-counter {
@@ -232,16 +217,13 @@
     box-shadow: 0 3px 10px rgba(255, 107, 157, 0.35);
     white-space: nowrap;
 }
-
 #starPage6 .star6-level {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
-
 #starPage6 .star6-stars-counter {
     background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
     color: #8b4513;
 }
-
 #starPage6 .star6-back-btn,
 #starPage6 .star6-pause-btn {
     background: rgba(255, 107, 157, 0.2);
@@ -258,64 +240,53 @@
     align-items: center;
     justify-content: center;
 }
-
 #starPage6 .star6-back-btn:active,
 #starPage6 .star6-pause-btn:active {
     transform: scale(0.9);
     background: rgba(255, 107, 157, 0.35);
 }
 
-/* Canvas container - PANTALLA COMPLETA */
+/* Canvas container - PANTALLA COMPLETA con gestos */
 #starPage6 .star6-canvas-container {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 8px;
+    padding: 8px 8px 4px 8px; /* Menos padding abajo */
     overflow: hidden;
     background: rgba(0, 0, 0, 0.05);
+    position: relative;
+    order: 2; /* Canvas en el medio */
 }
 
-#starPage6 #star6Canvas {
-    max-width: 100%;
-    max-height: 100%;
-    border: 4px solid #fff;
-    border-radius: 15px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-    background: #87ceeb;
-    image-rendering: crisp-edges;
-    display: block;
-}
-
-/* Controles optimizados para pantalla completa */
+/* Controles ABAJO pero MÁS ARRIBA (más visibles) */
 #starPage6 .star6-controls {
     position: relative;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 15px;
-    padding: 12px 20px;
-    background: rgba(255, 255, 255, 0.98);
-    box-shadow: 0 -3px 15px rgba(0, 0, 0, 0.15);
+    padding: 12px 20px 16px 20px; /* Más padding arriba, menos abajo */
+    background: linear-gradient(to top, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.95));
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.15);
     z-index: 100;
-    min-height: 95px;
+    min-height: 90px;
+    order: 3; /* Controles al final */
+    border-top: 2px solid rgba(255, 107, 157, 0.1);
 }
-
 #starPage6 .star6-controls-left {
     display: flex;
     gap: 12px;
     justify-content: flex-start;
     align-items: center;
 }
-
 #starPage6 .star6-controls-right {
     display: flex;
     justify-content: flex-end;
     align-items: center;
 }
-
 #starPage6 .star6-btn {
-    width: 68px;
-    height: 68px;
+    width: 65px;
+    height: 65px;
     border-radius: 50%;
     border: none;
     background: rgba(255, 255, 255, 0.98);
@@ -332,20 +303,42 @@
     justify-content: center;
     border: 3px solid rgba(255, 107, 157, 0.3);
 }
-
 #starPage6 .star6-btn:active {
     transform: scale(0.88);
     box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
 }
-
 #starPage6 .star6-btn-jump {
     background: linear-gradient(135deg, #ff6b9d 0%, #ff8fab 100%);
     color: white;
-    width: 78px;
-    height: 78px;
+    width: 75px;
+    height: 75px;
     font-size: 26px;
     box-shadow: 0 8px 25px rgba(255, 107, 157, 0.6);
     border: 3px solid rgba(255, 255, 255, 0.5);
+}
+#starPage6 #star6Canvas {
+    max-width: 100%;
+    max-height: 100%;
+    border: 4px solid #fff;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    background: #87ceeb;
+    image-rendering: crisp-edges;
+    display: block;
+    position: relative;
+    z-index: 1;
+}
+
+/* Overlay para capturar gestos */
+#starPage6 .star6-gesture-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    touch-action: none;
+    pointer-events: auto;
 }
 
 /* Mensaje romántico y overlays */
@@ -363,11 +356,9 @@
     animation: star6-fadeIn 0.4s ease;
     padding: 20px;
 }
-
 #starPage6 .star6-message-overlay.active {
     display: flex;
 }
-
 #starPage6 .star6-message-card {
     background: linear-gradient(135deg, #fff5f7 0%, #ffe8ec 100%);
     border-radius: 25px;
@@ -378,7 +369,6 @@
     box-shadow: 0 25px 70px rgba(255, 107, 157, 0.7);
     animation: star6-scaleIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
-
 #starPage6 .star6-message-card h2 {
     color: #ff6b9d;
     text-align: center;
@@ -386,7 +376,6 @@
     font-size: 24px;
     text-shadow: 2px 2px 4px rgba(255, 107, 157, 0.2);
 }
-
 #starPage6 .star6-message-card p {
     color: #555;
     line-height: 1.7;
@@ -394,7 +383,6 @@
     text-align: center;
     margin-bottom: 20px;
 }
-
 #starPage6 .star6-message-btn {
     padding: 14px 30px;
     background: linear-gradient(135deg, #ff6b9d 0%, #ff8fab 100%);
@@ -411,16 +399,13 @@
     width: 90%;
     max-width: 280px;
 }
-
 #starPage6 .star6-message-btn:active {
     transform: translateY(2px);
     box-shadow: 0 3px 10px rgba(255, 107, 157, 0.5);
 }
-
 #starPage6 .star6-secondary-btn {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
-
 /* Indicador de power-up */
 #starPage6 .star6-powerup-indicator {
     position: absolute;
@@ -438,18 +423,15 @@
     animation: star6-bounce 0.6s ease-in-out infinite;
     z-index: 99;
 }
-
 /* Animaciones */
 @keyframes star6-heartbeat {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.15); }
 }
-
 @keyframes star6-fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
 }
-
 @keyframes star6-scaleIn {
     from {
         opacity: 0;
@@ -460,23 +442,19 @@
         transform: scale(1) rotate(0);
     }
 }
-
 @keyframes star6-bounce {
     0%, 100% { transform: translateX(-50%) translateY(0); }
     50% { transform: translateX(-50%) translateY(-10px); }
 }
-
 @keyframes star6-rotate {
     0%, 100% { transform: rotate(0deg); }
     25% { transform: rotate(-20deg); }
     75% { transform: rotate(20deg); }
 }
-
 @keyframes star6-spin {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
 }
-
 /* Landscape (modo horizontal - ÓPTIMO) */
 @media (orientation: landscape) {
     #starPage6 .star6-header {
@@ -485,21 +463,20 @@
     }
     
     #starPage6 .star6-controls {
-        padding: 10px 25px;
-        min-height: 90px;
+        padding: 10px 25px 14px 25px;
+        min-height: 85px;
     }
     
     #starPage6 .star6-btn {
-        width: 65px;
-        height: 65px;
+        width: 62px;
+        height: 62px;
     }
     
     #starPage6 .star6-btn-jump {
-        width: 75px;
-        height: 75px;
+        width: 72px;
+        height: 72px;
     }
 }
-
 /* Pantallas muy anchas (tablets horizontales, etc) */
 @media (min-width: 768px) and (orientation: landscape) {
     #starPage6 #star6Canvas {
@@ -508,20 +485,19 @@
     }
     
     #starPage6 .star6-btn {
-        width: 70px;
-        height: 70px;
+        width: 68px;
+        height: 68px;
     }
     
     #starPage6 .star6-btn-jump {
-        width: 80px;
-        height: 80px;
+        width: 78px;
+        height: 78px;
     }
     
     #starPage6 .star6-controls {
-        padding: 12px 30px;
+        padding: 12px 30px 16px 30px;
     }
 }
-
 /* Ajustes para pantallas muy pequeñas */
 @media (max-height: 500px) and (orientation: landscape) {
     #starPage6 .star6-header {
@@ -530,19 +506,19 @@
     }
     
     #starPage6 .star6-controls {
-        padding: 8px 18px;
-        min-height: 80px;
+        padding: 8px 18px 12px 18px;
+        min-height: 75px;
     }
     
     #starPage6 .star6-btn {
-        width: 58px;
-        height: 58px;
+        width: 56px;
+        height: 56px;
         font-size: 26px;
     }
     
     #starPage6 .star6-btn-jump {
-        width: 68px;
-        height: 68px;
+        width: 65px;
+        height: 65px;
         font-size: 24px;
     }
     
@@ -558,12 +534,11 @@
     }
 }
 </style>
-
 <!-- ============================================ -->
-<!-- JAVASCRIPT MEJORADO PARA PANTALLA COMPLETA -->
+<!-- JAVASCRIPT MEJORADO CON CONTROLES POR GESTOS -->
 <!-- ============================================ -->
 <script>
-// Juego de la Estrella 6 - Versión Pantalla Completa Horizontal
+// Juego de la Estrella 6 - Versión con Gestos
 const star6Game = (function() {
     'use strict';
     
@@ -575,6 +550,12 @@ const star6Game = (function() {
     let gameRunning = false;
     let gamePaused = false;
     let animationId = null;
+    
+    // Variables para gestos
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchStartTime = 0;
+    let isSwiping = false;
     
     // Power-ups
     let powerups = {
@@ -872,6 +853,116 @@ const star6Game = (function() {
         } catch (e) {
             console.log('No se pudo entrar en pantalla completa:', e);
         }
+    }
+    
+    // Configurar controles por gestos
+    function setupGestureControls() {
+        const gestureOverlay = document.getElementById('star6GestureOverlay');
+        if (!gestureOverlay) return;
+        
+        // Touch events
+        gestureOverlay.addEventListener('touchstart', handleTouchStart, { passive: false });
+        gestureOverlay.addEventListener('touchmove', handleTouchMove, { passive: false });
+        gestureOverlay.addEventListener('touchend', handleTouchEnd, { passive: false });
+        
+        // Mouse events (para testing en desktop)
+        gestureOverlay.addEventListener('mousedown', handleMouseDown);
+        gestureOverlay.addEventListener('mousemove', handleMouseMove);
+        gestureOverlay.addEventListener('mouseup', handleMouseUp);
+    }
+    
+    function handleTouchStart(e) {
+        e.preventDefault();
+        const touch = e.touches[0];
+        touchStartX = touch.clientX;
+        touchStartY = touch.clientY;
+        touchStartTime = Date.now();
+        isSwiping = false;
+    }
+    
+    function handleTouchMove(e) {
+        if (!gameRunning || gamePaused) return;
+        e.preventDefault();
+        
+        const touch = e.touches[0];
+        const deltaX = touch.clientX - touchStartX;
+        const deltaY = touch.clientY - touchStartY;
+        
+        // Detectar dirección del swipe
+        if (Math.abs(deltaX) > 30 || Math.abs(deltaY) > 30) {
+            isSwiping = true;
+            
+            // Movimiento horizontal
+            if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                if (deltaX > 30) {
+                    keys.right = true;
+                    keys.left = false;
+                } else if (deltaX < -30) {
+                    keys.left = true;
+                    keys.right = false;
+                }
+            }
+        }
+    }
+    
+    function handleTouchEnd(e) {
+        e.preventDefault();
+        
+        const touchEndTime = Date.now();
+        const touchDuration = touchEndTime - touchStartTime;
+        
+        // Si fue un tap rápido (no swipe), hacer salto
+        if (!isSwiping && touchDuration < 200) {
+            jump();
+        }
+        
+        // Detener movimiento horizontal
+        keys.left = false;
+        keys.right = false;
+        isSwiping = false;
+    }
+    
+    // Mouse events para testing
+    function handleMouseDown(e) {
+        touchStartX = e.clientX;
+        touchStartY = e.clientY;
+        touchStartTime = Date.now();
+        isSwiping = false;
+    }
+    
+    function handleMouseMove(e) {
+        if (!gameRunning || gamePaused) return;
+        if (e.buttons !== 1) return; // Solo si está presionado el botón
+        
+        const deltaX = e.clientX - touchStartX;
+        const deltaY = e.clientY - touchStartY;
+        
+        if (Math.abs(deltaX) > 30 || Math.abs(deltaY) > 30) {
+            isSwiping = true;
+            
+            if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                if (deltaX > 30) {
+                    keys.right = true;
+                    keys.left = false;
+                } else if (deltaX < -30) {
+                    keys.left = true;
+                    keys.right = false;
+                }
+            }
+        }
+    }
+    
+    function handleMouseUp(e) {
+        const touchEndTime = Date.now();
+        const touchDuration = touchEndTime - touchStartTime;
+        
+        if (!isSwiping && touchDuration < 200) {
+            jump();
+        }
+        
+        keys.left = false;
+        keys.right = false;
+        isSwiping = false;
     }
     
     // Inicializar canvas
@@ -1666,6 +1757,7 @@ const star6Game = (function() {
     function start() {
         if (!initCanvas()) return;
         setupControls();
+        setupGestureControls(); // NUEVO: Configurar gestos
         checkOrientation();
         
         // Intentar entrar en pantalla completa
@@ -1703,13 +1795,11 @@ const star6Game = (function() {
         restart: restart
     };
 })();
-
 document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
         star6Game.start();
     }, 100);
 });
-
 function goBackSafe() {
     if (document.referrer) {
         history.back();
