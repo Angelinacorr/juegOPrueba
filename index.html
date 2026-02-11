@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Juego de Plataformas - Aventura del Amor (Difícil)</title>
+    <title>Juego de Plataformas - Aventura del Amor (Dificultad Media)</title>
     <style>
         /* Reset y base */
         * {
@@ -606,8 +606,8 @@
                 vx: 0,
                 vy: 0,
                 speed: 5,
-                jumpPower: 15,
-                gravity: 0.5,
+                jumpPower: 14,  // Reducido de 15
+                gravity: 0.6,    // Aumentado de 0.5
                 onGround: false,
                 jumpsLeft: 1,
                 color: '#ff6b9d',
@@ -624,20 +624,20 @@
             let particles = [];
             let movingPlatforms = [];
             
-            // NIVELES CON DIFICULTAD REDUCIDA
+            // NIVELES CON DIFICULTAD MODERADAMENTE AUMENTADA
             const levels = [
                 {
                     name: "Comienzo del Desafío",
-                    gravity: 0.5,
+                    gravity: 0.6,  // Aumentado de 0.5
                     platforms: [
                         { x: 0, y: 550, width: 800, height: 50, type: 'ground' },
-                        { x: 180, y: 470, width: 110, height: 20, type: 'normal' },
-                        { x: 430, y: 390, width: 120, height: 20, type: 'normal' },
-                        { x: 220, y: 290, width: 140, height: 20, type: 'normal' },
-                        { x: 500, y: 200, width: 120, height: 20, type: 'normal' }
+                        { x: 180, y: 470, width: 100, height: 20, type: 'normal' },  // Reducido de 110
+                        { x: 430, y: 390, width: 110, height: 20, type: 'normal' },  // Reducido de 120
+                        { x: 220, y: 290, width: 130, height: 20, type: 'normal' },  // Reducido de 140
+                        { x: 500, y: 200, width: 110, height: 20, type: 'normal' }   // Reducido de 120
                     ],
                     enemies: [
-                        { x: 600, y: 510, width: 28, height: 28, speed: 1.5, dir: -1, minX: 500, maxX: 750 }
+                        { x: 600, y: 510, width: 28, height: 28, speed: 1.8, dir: -1, minX: 480, maxX: 750 }  // Speed aumentado, rango ampliado
                     ],
                     traps: [],
                     hearts: [],
@@ -652,24 +652,24 @@
                 },
                 {
                     name: "Saltos Precisos",
-                    gravity: 0.5,
+                    gravity: 0.6,
                     platforms: [
-                        { x: 0, y: 550, width: 140, height: 50, type: 'ground' },
-                        { x: 660, y: 550, width: 140, height: 50, type: 'ground' },
-                        { x: 90, y: 430, width: 100, height: 20, type: 'normal' },
-                        { x: 610, y: 430, width: 100, height: 20, type: 'normal' },
-                        { x: 200, y: 320, width: 130, height: 20, type: 'normal' },
-                        { x: 470, y: 320, width: 130, height: 20, type: 'normal' },
-                        { x: 340, y: 210, width: 140, height: 20, type: 'normal' }
+                        { x: 0, y: 550, width: 130, height: 50, type: 'ground' },  // Reducido de 140
+                        { x: 670, y: 550, width: 130, height: 50, type: 'ground' },
+                        { x: 90, y: 430, width: 90, height: 20, type: 'normal' },   // Reducido de 100
+                        { x: 610, y: 430, width: 90, height: 20, type: 'normal' },
+                        { x: 200, y: 320, width: 120, height: 20, type: 'normal' }, // Reducido de 130
+                        { x: 470, y: 320, width: 120, height: 20, type: 'normal' },
+                        { x: 340, y: 210, width: 130, height: 20, type: 'normal' }  // Reducido de 140
                     ],
                     movingPlatforms: [
-                        { x: 280, y: 380, width: 100, height: 20, speed: 1.8, minX: 230, maxX: 470, dir: 1 }
+                        { x: 280, y: 380, width: 95, height: 20, speed: 2.1, minX: 220, maxX: 480, dir: 1 }  // Speed y rango aumentados
                     ],
                     enemies: [
-                        { x: 230, y: 280, width: 28, height: 28, speed: 1.5, dir: 1, minX: 200, maxX: 330 }
+                        { x: 230, y: 280, width: 28, height: 28, speed: 1.8, dir: 1, minX: 190, maxX: 340 }  // Speed y rango aumentados
                     ],
                     traps: [
-                        { x: 320, y: 360, width: 60, height: 20, type: 'fire' }
+                        { x: 320, y: 360, width: 65, height: 20, type: 'fire' }  // Aumentado de 60
                     ],
                     hearts: [
                         { x: 370, y: 340, width: 24, height: 24 }
@@ -687,39 +687,40 @@
                 },
                 {
                     name: "Laberinto Elevado",
-                    gravity: 0.5,
+                    gravity: 0.6,
                     platforms: [
-                        { x: 0, y: 550, width: 130, height: 50, type: 'ground' },
-                        { x: 670, y: 550, width: 130, height: 50, type: 'ground' },
-                        { x: 120, y: 460, width: 90, height: 20, type: 'normal' },
-                        { x: 590, y: 460, width: 90, height: 20, type: 'normal' },
-                        { x: 180, y: 360, width: 100, height: 20, type: 'normal' },
-                        { x: 520, y: 360, width: 100, height: 20, type: 'normal' },
-                        { x: 330, y: 250, width: 130, height: 20, type: 'normal' },
-                        { x: 250, y: 160, width: 120, height: 20, type: 'normal' },
-                        { x: 450, y: 160, width: 120, height: 20, type: 'normal' }
+                        { x: 0, y: 550, width: 120, height: 50, type: 'ground' },    // Reducido de 130
+                        { x: 680, y: 550, width: 120, height: 50, type: 'ground' },
+                        { x: 120, y: 460, width: 80, height: 20, type: 'normal' },   // Reducido de 90
+                        { x: 600, y: 460, width: 80, height: 20, type: 'normal' },
+                        { x: 180, y: 360, width: 90, height: 20, type: 'normal' },   // Reducido de 100
+                        { x: 530, y: 360, width: 90, height: 20, type: 'normal' },
+                        { x: 330, y: 250, width: 120, height: 20, type: 'normal' },  // Reducido de 130
+                        { x: 250, y: 160, width: 110, height: 20, type: 'normal' },  // Reducido de 120
+                        { x: 460, y: 160, width: 110, height: 20, type: 'normal' }
                     ],
                     movingPlatforms: [
-                        { x: 310, y: 410, width: 90, height: 20, speed: 2, minX: 260, maxX: 490, dir: 1 }
+                        { x: 310, y: 410, width: 85, height: 20, speed: 2.3, minX: 250, maxX: 500, dir: 1 }  // Aumentados
                     ],
                     enemies: [
-                        { x: 150, y: 420, width: 28, height: 28, speed: 1.5, dir: 1, minX: 120, maxX: 210 },
-                        { x: 560, y: 320, width: 28, height: 28, speed: 1.5, dir: -1, minX: 520, maxX: 620 }
+                        { x: 150, y: 420, width: 28, height: 28, speed: 1.8, dir: 1, minX: 110, maxX: 220 },  // Aumentados
+                        { x: 560, y: 320, width: 28, height: 28, speed: 2.0, dir: -1, minX: 510, maxX: 630 }  // Aumentados
                     ],
                     traps: [
-                        { x: 300, y: 230, width: 50, height: 20, type: 'fire' }
+                        { x: 295, y: 230, width: 60, height: 20, type: 'fire' },  // Aumentado y reposicionado
+                        { x: 380, y: 320, width: 45, height: 20, type: 'fire' }   // Nueva trampa
                     ],
                     hearts: [
                         { x: 370, y: 215, width: 24, height: 24 }
                     ],
                     stars: [
                         { x: 155, y: 425, width: 18, height: 18 },
-                        { x: 630, y: 425, width: 18, height: 18 },
+                        { x: 640, y: 425, width: 18, height: 18 },
                         { x: 220, y: 325, width: 18, height: 18 },
-                        { x: 560, y: 325, width: 18, height: 18 },
+                        { x: 570, y: 325, width: 18, height: 18 },
                         { x: 370, y: 215, width: 18, height: 18 },
                         { x: 290, y: 125, width: 18, height: 18 },
-                        { x: 490, y: 125, width: 18, height: 18 }
+                        { x: 500, y: 125, width: 18, height: 18 }
                     ],
                     powerups: [
                         { x: 350, y: 370, width: 20, height: 20, type: 'doubleJump' }
@@ -727,39 +728,40 @@
                 },
                 {
                     name: "Torres del Destino",
-                    gravity: 0.5,
+                    gravity: 0.6,
                     platforms: [
                         { x: 0, y: 550, width: 800, height: 50, type: 'ground' },
-                        { x: 140, y: 450, width: 110, height: 20, type: 'normal' },
-                        { x: 550, y: 450, width: 110, height: 20, type: 'normal' },
-                        { x: 80, y: 340, width: 120, height: 20, type: 'normal' },
-                        { x: 600, y: 340, width: 120, height: 20, type: 'normal' },
-                        { x: 310, y: 240, width: 160, height: 20, type: 'normal' },
-                        { x: 200, y: 150, width: 130, height: 20, type: 'normal' },
-                        { x: 480, y: 150, width: 130, height: 20, type: 'normal' }
+                        { x: 140, y: 450, width: 100, height: 20, type: 'normal' },  // Reducido de 110
+                        { x: 560, y: 450, width: 100, height: 20, type: 'normal' },
+                        { x: 80, y: 340, width: 110, height: 20, type: 'normal' },   // Reducido de 120
+                        { x: 610, y: 340, width: 110, height: 20, type: 'normal' },
+                        { x: 310, y: 240, width: 150, height: 20, type: 'normal' },  // Reducido de 160
+                        { x: 200, y: 150, width: 120, height: 20, type: 'normal' },  // Reducido de 130
+                        { x: 490, y: 150, width: 120, height: 20, type: 'normal' }
                     ],
                     movingPlatforms: [
-                        { x: 350, y: 380, width: 90, height: 20, speed: 1.8, minX: 300, maxX: 500, dir: 1 }
+                        { x: 350, y: 380, width: 85, height: 20, speed: 2.2, minX: 290, maxX: 510, dir: 1 }  // Aumentados
                     ],
                     enemies: [
-                        { x: 170, y: 410, width: 28, height: 28, speed: 1.5, dir: 1, minX: 140, maxX: 250 },
-                        { x: 110, y: 300, width: 28, height: 28, speed: 1.5, dir: 1, minX: 80, maxX: 200 }
+                        { x: 170, y: 410, width: 28, height: 28, speed: 1.9, dir: 1, minX: 130, maxX: 260 },  // Aumentados
+                        { x: 110, y: 300, width: 28, height: 28, speed: 2.0, dir: 1, minX: 70, maxX: 210 }    // Aumentados
                     ],
                     traps: [
-                        { x: 280, y: 220, width: 50, height: 20, type: 'fire' },
-                        { x: 450, y: 220, width: 50, height: 20, type: 'fire' }
+                        { x: 270, y: 220, width: 55, height: 20, type: 'fire' },  // Aumentado
+                        { x: 460, y: 220, width: 55, height: 20, type: 'fire' },
+                        { x: 400, y: 520, width: 50, height: 20, type: 'fire' }   // Nueva trampa
                     ],
                     hearts: [
-                        { x: 370, y: 205, width: 24, height: 24 }
+                        { x: 375, y: 205, width: 24, height: 24 }
                     ],
                     stars: [
                         { x: 180, y: 415, width: 18, height: 18 },
-                        { x: 590, y: 415, width: 18, height: 18 },
+                        { x: 600, y: 415, width: 18, height: 18 },
                         { x: 125, y: 305, width: 18, height: 18 },
-                        { x: 655, y: 305, width: 18, height: 18 },
-                        { x: 360, y: 205, width: 18, height: 18 },
+                        { x: 665, y: 305, width: 18, height: 18 },
+                        { x: 370, y: 205, width: 18, height: 18 },
                         { x: 250, y: 115, width: 18, height: 18 },
-                        { x: 530, y: 115, width: 18, height: 18 }
+                        { x: 540, y: 115, width: 18, height: 18 }
                     ],
                     powerups: [
                         { x: 380, y: 340, width: 20, height: 20, type: 'invincible' }
@@ -767,53 +769,54 @@
                 },
                 {
                     name: "Fortaleza Final",
-                    gravity: 0.5,
+                    gravity: 0.6,
                     platforms: [
-                        { x: 0, y: 550, width: 110, height: 50, type: 'ground' },
-                        { x: 690, y: 550, width: 110, height: 50, type: 'ground' },
-                        { x: 140, y: 480, width: 85, height: 20, type: 'normal' },
-                        { x: 575, y: 480, width: 85, height: 20, type: 'normal' },
-                        { x: 100, y: 390, width: 100, height: 20, type: 'normal' },
-                        { x: 600, y: 390, width: 100, height: 20, type: 'normal' },
-                        { x: 230, y: 310, width: 110, height: 20, type: 'normal' },
-                        { x: 460, y: 310, width: 110, height: 20, type: 'normal' },
-                        { x: 320, y: 220, width: 150, height: 20, type: 'normal' },
-                        { x: 240, y: 140, width: 130, height: 20, type: 'normal' },
-                        { x: 440, y: 140, width: 130, height: 20, type: 'normal' },
-                        { x: 350, y: 70, width: 110, height: 20, type: 'normal' }
+                        { x: 0, y: 550, width: 100, height: 50, type: 'ground' },    // Reducido de 110
+                        { x: 700, y: 550, width: 100, height: 50, type: 'ground' },
+                        { x: 140, y: 480, width: 75, height: 20, type: 'normal' },   // Reducido de 85
+                        { x: 585, y: 480, width: 75, height: 20, type: 'normal' },
+                        { x: 100, y: 390, width: 90, height: 20, type: 'normal' },   // Reducido de 100
+                        { x: 610, y: 390, width: 90, height: 20, type: 'normal' },
+                        { x: 230, y: 310, width: 100, height: 20, type: 'normal' },  // Reducido de 110
+                        { x: 470, y: 310, width: 100, height: 20, type: 'normal' },
+                        { x: 320, y: 220, width: 140, height: 20, type: 'normal' },  // Reducido de 150
+                        { x: 240, y: 140, width: 120, height: 20, type: 'normal' },  // Reducido de 130
+                        { x: 450, y: 140, width: 120, height: 20, type: 'normal' },
+                        { x: 360, y: 70, width: 100, height: 20, type: 'normal' }    // Reducido de 110
                     ],
                     movingPlatforms: [
-                        { x: 310, y: 440, width: 100, height: 20, speed: 2, minX: 270, maxX: 490, dir: 1 }
+                        { x: 310, y: 440, width: 95, height: 20, speed: 2.4, minX: 260, maxX: 500, dir: 1 }  // Aumentados
                     ],
                     enemies: [
-                        { x: 165, y: 440, width: 28, height: 28, speed: 1.8, dir: 1, minX: 140, maxX: 225 },
-                        { x: 260, y: 270, width: 28, height: 28, speed: 1.5, dir: 1, minX: 230, maxX: 340 },
-                        { x: 360, y: 180, width: 28, height: 28, speed: 1.5, dir: 1, minX: 320, maxX: 470 }
+                        { x: 165, y: 440, width: 28, height: 28, speed: 2.1, dir: 1, minX: 130, maxX: 235 },  // Aumentados
+                        { x: 260, y: 270, width: 28, height: 28, speed: 1.9, dir: 1, minX: 220, maxX: 350 },  // Aumentados
+                        { x: 360, y: 180, width: 28, height: 28, speed: 2.0, dir: 1, minX: 310, maxX: 480 }   // Aumentados
                     ],
                     traps: [
-                        { x: 250, y: 460, width: 320, height: 20, type: 'fire' },
-                        { x: 290, y: 200, width: 50, height: 20, type: 'fire' }
+                        { x: 240, y: 460, width: 340, height: 20, type: 'fire' },  // Aumentado de 320
+                        { x: 280, y: 200, width: 60, height: 20, type: 'fire' },   // Aumentado de 50
+                        { x: 350, y: 350, width: 50, height: 20, type: 'fire' }    // Nueva trampa
                     ],
                     hearts: [
-                        { x: 375, y: 185, width: 24, height: 24 },
-                        { x: 385, y: 35, width: 24, height: 24 }
+                        { x: 380, y: 185, width: 24, height: 24 },
+                        { x: 390, y: 35, width: 24, height: 24 }
                     ],
                     stars: [
                         { x: 170, y: 445, width: 18, height: 18 },
-                        { x: 615, y: 445, width: 18, height: 18 },
+                        { x: 625, y: 445, width: 18, height: 18 },
                         { x: 140, y: 355, width: 18, height: 18 },
-                        { x: 645, y: 355, width: 18, height: 18 },
+                        { x: 655, y: 355, width: 18, height: 18 },
                         { x: 270, y: 275, width: 18, height: 18 },
-                        { x: 510, y: 275, width: 18, height: 18 },
-                        { x: 370, y: 185, width: 18, height: 18 },
+                        { x: 520, y: 275, width: 18, height: 18 },
+                        { x: 375, y: 185, width: 18, height: 18 },
                         { x: 290, y: 105, width: 18, height: 18 },
-                        { x: 490, y: 105, width: 18, height: 18 },
-                        { x: 385, y: 35, width: 18, height: 18 }
+                        { x: 500, y: 105, width: 18, height: 18 },
+                        { x: 390, y: 35, width: 18, height: 18 }
                     ],
                     powerups: [
-                        { x: 350, y: 400, width: 20, height: 20, type: 'invincible' },
+                        { x: 360, y: 400, width: 20, height: 20, type: 'invincible' },
                         { x: 170, y: 350, width: 20, height: 20, type: 'doubleJump' },
-                        { x: 385, y: 275, width: 20, height: 20, type: 'speed' }
+                        { x: 390, y: 275, width: 20, height: 20, type: 'speed' }
                     ]
                 }
             ];
@@ -999,7 +1002,7 @@
                 if (!level) {
                     gameRunning = false;
                     setTimeout(() => {
-                        alert('🎉 ¡FELICIDADES! 🎉\n\n¡Has completado todos los niveles!\n\nPuntuación final: ' + score + '\n\n💖 ¡Eres él mejor! Pideme lo que quieras como premio 💖');
+                        alert('🎉 ¡FELICIDADES! 🎉\n\n¡Has completado todos los niveles!\n\nPuntuación final: ' + score + '\n\n💖 ¡Eres el mejor! Pídeme lo que quieras como premio 💖');
                         resetGame();
                     }, 100);
                     return;
@@ -1221,7 +1224,7 @@
             function gameOver() {
                 gameRunning = false;
                 setTimeout(() => {
-                    alert(`💔 Game Over 💔\n\nPuntuación: ${score}\nNivel: ${currentLevel}\n\n¡Inténtalo de nuevo mi amor,yo se que puedes!`);
+                    alert(`💔 Game Over 💔\n\nPuntuación: ${score}\nNivel: ${currentLevel}\n\n¡Inténtalo de nuevo mi amor, yo sé que puedes!`);
                     resetGame();
                 }, 100);
             }
